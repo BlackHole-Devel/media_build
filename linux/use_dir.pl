@@ -178,7 +178,7 @@ sub get_patched_files()
 
 		if (m/(.*)\n/) {
 			print ("Backport ../backports/$1 touch(es) file(s):\n") if ($debug);
-			open IN2, "lsdiff -h --strip 1 ../backports/$1 |";
+			open IN2, "/usr/bin/lsdiff -h --strip 1 ../backports/$1 |";
 			while (<IN2>) {
 				my $f = $_;
 				$f =~ s/\n//;

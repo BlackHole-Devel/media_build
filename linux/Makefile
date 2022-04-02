@@ -118,7 +118,7 @@ clean:
 	-rm -rf $(MAINDIRS) mm .patches_applied .linked_dir .git_log.md5 git_log kernel_version.h
 
 dir: clean
-	@lsdiff --version >/dev/null # Make 'make dir' fail if lsdiff is not installed
+	@/usr/bin/lsdiff --version >/dev/null # Make 'make dir' fail if lsdiff is not installed
 	@if [ "$(DIR)" = "" ]; then echo "make $@ DIR=<version>"; exit -1; fi
 	@if [ ! -f "$(DIR)/include/uapi/linux/videodev2.h" ]; then echo "$(DIR) does not contain kernel sources"; exit -1; fi
 	@echo "Searching in $(DIR)/Makefile for kernel version."
