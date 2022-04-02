@@ -9,305 +9,305 @@ Signed-off-by: Antti Palosaari <crope@iki.fi>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 ---
  drivers/media/dvb-frontends/Kconfig       |   2 +-
- drivers/media/dvb-frontends/af9013.c      | 124 ++++++++++++++++++----
- drivers/media/dvb-frontends/af9013.h      |   1 +
- drivers/media/dvb-frontends/af9013_priv.h |   1 +
- 4 files changed, 109 insertions(+), 19 deletions(-)
+ drivers/media/dvb-frontends/af9013.c      | 124 ++++------------------
+ drivers/media/dvb-frontends/af9013.h      |   1 -
+ drivers/media/dvb-frontends/af9013_priv.h |   1 -
+ 4 files changed, 19 insertions(+), 109 deletions(-)
 
 diff --git a/drivers/media/dvb-frontends/Kconfig b/drivers/media/dvb-frontends/Kconfig
-index f6be6cb09485..2ef2ff2a38ff 100644
+index 2ef2ff2a38ff..f6be6cb09485 100644
 --- a/drivers/media/dvb-frontends/Kconfig
 +++ b/drivers/media/dvb-frontends/Kconfig
 @@ -324,7 +324,7 @@ comment "DVB-T (terrestrial) frontends"
  
  config DVB_AF9013
  	tristate "Afatech AF9013 demodulator"
--	depends on DVB_CORE && I2C
-+	depends on DVB_CORE && I2C && I2C_MUX
+-	depends on DVB_CORE && I2C && I2C_MUX
++	depends on DVB_CORE && I2C
  	select REGMAP
  	default m if !MEDIA_SUBDRV_AUTOSELECT
  	help
 diff --git a/drivers/media/dvb-frontends/af9013.c b/drivers/media/dvb-frontends/af9013.c
-index 7f52c0cf5dae..7d7c341b2bd8 100644
+index 7d7c341b2bd8..7f52c0cf5dae 100644
 --- a/drivers/media/dvb-frontends/af9013.c
 +++ b/drivers/media/dvb-frontends/af9013.c
-@@ -13,6 +13,7 @@
+@@ -13,7 +13,6 @@
  struct af9013_state {
  	struct i2c_client *client;
  	struct regmap *regmap;
-+	struct i2c_mux_core *muxc;
+-	struct i2c_mux_core *muxc;
  	struct dvb_frontend fe;
  	u32 clk;
  	u8 tuner;
-@@ -1218,9 +1219,65 @@ static struct dvb_frontend *af9013_get_dvb_frontend(struct i2c_client *client)
+@@ -1219,65 +1218,9 @@ static struct dvb_frontend *af9013_get_dvb_frontend(struct i2c_client *client)
  	return &state->fe;
  }
  
-+static struct i2c_adapter *af9013_get_i2c_adapter(struct i2c_client *client)
-+{
-+	struct af9013_state *state = i2c_get_clientdata(client);
-+
-+	dev_dbg(&client->dev, "\n");
-+
-+	return state->muxc->adapter[0];
-+}
-+
-+/*
-+ * XXX: Hackish solution. We use virtual register, reg bit 16, to carry info
-+ * about i2c adapter locking. Own locking is needed because i2c mux call has
-+ * already locked i2c adapter.
-+ */
-+static int af9013_select(struct i2c_mux_core *muxc, u32 chan)
-+{
-+	struct af9013_state *state = i2c_mux_priv(muxc);
-+	struct i2c_client *client = state->client;
-+	int ret;
-+
-+	dev_dbg(&client->dev, "\n");
-+
-+	if (state->ts_mode == AF9013_TS_MODE_USB)
-+		ret = regmap_update_bits(state->regmap, 0x1d417, 0x08, 0x08);
-+	else
-+		ret = regmap_update_bits(state->regmap, 0x1d607, 0x04, 0x04);
-+	if (ret)
-+		goto err;
-+
-+	return 0;
-+err:
-+	dev_dbg(&client->dev, "failed %d\n", ret);
-+	return ret;
-+}
-+
-+static int af9013_deselect(struct i2c_mux_core *muxc, u32 chan)
-+{
-+	struct af9013_state *state = i2c_mux_priv(muxc);
-+	struct i2c_client *client = state->client;
-+	int ret;
-+
-+	dev_dbg(&client->dev, "\n");
-+
-+	if (state->ts_mode == AF9013_TS_MODE_USB)
-+		ret = regmap_update_bits(state->regmap, 0x1d417, 0x08, 0x00);
-+	else
-+		ret = regmap_update_bits(state->regmap, 0x1d607, 0x04, 0x00);
-+	if (ret)
-+		goto err;
-+
-+	return 0;
-+err:
-+	dev_dbg(&client->dev, "failed %d\n", ret);
-+	return ret;
-+}
-+
+-static struct i2c_adapter *af9013_get_i2c_adapter(struct i2c_client *client)
+-{
+-	struct af9013_state *state = i2c_get_clientdata(client);
+-
+-	dev_dbg(&client->dev, "\n");
+-
+-	return state->muxc->adapter[0];
+-}
+-
+-/*
+- * XXX: Hackish solution. We use virtual register, reg bit 16, to carry info
+- * about i2c adapter locking. Own locking is needed because i2c mux call has
+- * already locked i2c adapter.
+- */
+-static int af9013_select(struct i2c_mux_core *muxc, u32 chan)
+-{
+-	struct af9013_state *state = i2c_mux_priv(muxc);
+-	struct i2c_client *client = state->client;
+-	int ret;
+-
+-	dev_dbg(&client->dev, "\n");
+-
+-	if (state->ts_mode == AF9013_TS_MODE_USB)
+-		ret = regmap_update_bits(state->regmap, 0x1d417, 0x08, 0x08);
+-	else
+-		ret = regmap_update_bits(state->regmap, 0x1d607, 0x04, 0x04);
+-	if (ret)
+-		goto err;
+-
+-	return 0;
+-err:
+-	dev_dbg(&client->dev, "failed %d\n", ret);
+-	return ret;
+-}
+-
+-static int af9013_deselect(struct i2c_mux_core *muxc, u32 chan)
+-{
+-	struct af9013_state *state = i2c_mux_priv(muxc);
+-	struct i2c_client *client = state->client;
+-	int ret;
+-
+-	dev_dbg(&client->dev, "\n");
+-
+-	if (state->ts_mode == AF9013_TS_MODE_USB)
+-		ret = regmap_update_bits(state->regmap, 0x1d417, 0x08, 0x00);
+-	else
+-		ret = regmap_update_bits(state->regmap, 0x1d607, 0x04, 0x00);
+-	if (ret)
+-		goto err;
+-
+-	return 0;
+-err:
+-	dev_dbg(&client->dev, "failed %d\n", ret);
+-	return ret;
+-}
+-
  /* Own I2C access routines needed for regmap as chip uses extra command byte */
  static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
--			const u8 *val, int len)
-+			const u8 *val, int len, u8 lock)
+-			const u8 *val, int len, u8 lock)
++			const u8 *val, int len)
  {
  	int ret;
  	u8 buf[21];
-@@ -1243,7 +1300,11 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
+@@ -1300,11 +1243,7 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
  	buf[2] = cmd;
  	memcpy(&buf[3], val, len);
  
--	ret = i2c_transfer(client->adapter, msg, 1);
-+	if (lock)
-+		i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+	ret = __i2c_transfer(client->adapter, msg, 1);
-+	if (lock)
-+		i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
+-	if (lock)
+-		i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
+-	ret = __i2c_transfer(client->adapter, msg, 1);
+-	if (lock)
+-		i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
++	ret = i2c_transfer(client->adapter, msg, 1);
  	if (ret < 0) {
  		goto err;
  	} else if (ret != 1) {
-@@ -1258,7 +1319,7 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
+@@ -1319,7 +1258,7 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
  }
  
  static int af9013_rregs(struct i2c_client *client, u8 cmd, u16 reg,
--			u8 *val, int len)
-+			u8 *val, int len, u8 lock)
+-			u8 *val, int len, u8 lock)
++			u8 *val, int len)
  {
  	int ret;
  	u8 buf[3];
-@@ -1280,7 +1341,11 @@ static int af9013_rregs(struct i2c_client *client, u8 cmd, u16 reg,
+@@ -1341,11 +1280,7 @@ static int af9013_rregs(struct i2c_client *client, u8 cmd, u16 reg,
  	buf[1] = (reg >> 0) & 0xff;
  	buf[2] = cmd;
  
--	ret = i2c_transfer(client->adapter, msg, 2);
-+	if (lock)
-+		i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
-+	ret = __i2c_transfer(client->adapter, msg, 2);
-+	if (lock)
-+		i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
+-	if (lock)
+-		i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
+-	ret = __i2c_transfer(client->adapter, msg, 2);
+-	if (lock)
+-		i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
++	ret = i2c_transfer(client->adapter, msg, 2);
  	if (ret < 0) {
  		goto err;
  	} else if (ret != 2) {
-@@ -1300,25 +1365,27 @@ static int af9013_regmap_write(void *context, const void *data, size_t count)
+@@ -1365,27 +1300,25 @@ static int af9013_regmap_write(void *context, const void *data, size_t count)
  	struct af9013_state *state = i2c_get_clientdata(client);
  	int ret, i;
  	u8 cmd;
--	u16 reg = ((u8 *)data)[0] << 8|((u8 *)data)[1] << 0;
--	u8 *val = &((u8 *)data)[2];
--	const unsigned int len = count - 2;
-+	u8 lock = !((u8 *)data)[0];
-+	u16 reg = ((u8 *)data)[1] << 8 | ((u8 *)data)[2] << 0;
-+	u8 *val = &((u8 *)data)[3];
-+	const unsigned int len = count - 3;
+-	u8 lock = !((u8 *)data)[0];
+-	u16 reg = ((u8 *)data)[1] << 8 | ((u8 *)data)[2] << 0;
+-	u8 *val = &((u8 *)data)[3];
+-	const unsigned int len = count - 3;
++	u16 reg = ((u8 *)data)[0] << 8|((u8 *)data)[1] << 0;
++	u8 *val = &((u8 *)data)[2];
++	const unsigned int len = count - 2;
  
  	if (state->ts_mode == AF9013_TS_MODE_USB && (reg & 0xff00) != 0xae00) {
  		cmd = 0 << 7|0 << 6|(len - 1) << 2|1 << 1|1 << 0;
--		ret = af9013_wregs(client, cmd, reg, val, len);
-+		ret = af9013_wregs(client, cmd, reg, val, len, lock);
+-		ret = af9013_wregs(client, cmd, reg, val, len, lock);
++		ret = af9013_wregs(client, cmd, reg, val, len);
  		if (ret)
  			goto err;
  	} else if (reg >= 0x5100 && reg < 0x8fff) {
  		/* Firmware download */
  		cmd = 1 << 7|1 << 6|(len - 1) << 2|1 << 1|1 << 0;
--		ret = af9013_wregs(client, cmd, reg, val, len);
-+		ret = af9013_wregs(client, cmd, reg, val, len, lock);
+-		ret = af9013_wregs(client, cmd, reg, val, len, lock);
++		ret = af9013_wregs(client, cmd, reg, val, len);
  		if (ret)
  			goto err;
  	} else {
  		cmd = 0 << 7|0 << 6|(1 - 1) << 2|1 << 1|1 << 0;
  		for (i = 0; i < len; i++) {
--			ret = af9013_wregs(client, cmd, reg + i, val + i, 1);
-+			ret = af9013_wregs(client, cmd, reg + i, val + i, 1,
-+					   lock);
+-			ret = af9013_wregs(client, cmd, reg + i, val + i, 1,
+-					   lock);
++			ret = af9013_wregs(client, cmd, reg + i, val + i, 1);
  			if (ret)
  				goto err;
  		}
-@@ -1337,19 +1404,21 @@ static int af9013_regmap_read(void *context, const void *reg_buf,
+@@ -1404,21 +1337,19 @@ static int af9013_regmap_read(void *context, const void *reg_buf,
  	struct af9013_state *state = i2c_get_clientdata(client);
  	int ret, i;
  	u8 cmd;
--	u16 reg = ((u8 *)reg_buf)[0] << 8|((u8 *)reg_buf)[1] << 0;
-+	u8 lock = !((u8 *)reg_buf)[0];
-+	u16 reg = ((u8 *)reg_buf)[1] << 8 | ((u8 *)reg_buf)[2] << 0;
+-	u8 lock = !((u8 *)reg_buf)[0];
+-	u16 reg = ((u8 *)reg_buf)[1] << 8 | ((u8 *)reg_buf)[2] << 0;
++	u16 reg = ((u8 *)reg_buf)[0] << 8|((u8 *)reg_buf)[1] << 0;
  	u8 *val = &((u8 *)val_buf)[0];
  	const unsigned int len = val_size;
  
  	if (state->ts_mode == AF9013_TS_MODE_USB && (reg & 0xff00) != 0xae00) {
  		cmd = 0 << 7|0 << 6|(len - 1) << 2|1 << 1|0 << 0;
--		ret = af9013_rregs(client, cmd, reg, val_buf, len);
-+		ret = af9013_rregs(client, cmd, reg, val_buf, len, lock);
+-		ret = af9013_rregs(client, cmd, reg, val_buf, len, lock);
++		ret = af9013_rregs(client, cmd, reg, val_buf, len);
  		if (ret)
  			goto err;
  	} else {
  		cmd = 0 << 7|0 << 6|(1 - 1) << 2|1 << 1|0 << 0;
  		for (i = 0; i < len; i++) {
--			ret = af9013_rregs(client, cmd, reg + i, val + i, 1);
-+			ret = af9013_rregs(client, cmd, reg + i, val + i, 1,
-+					   lock);
+-			ret = af9013_rregs(client, cmd, reg + i, val + i, 1,
+-					   lock);
++			ret = af9013_rregs(client, cmd, reg + i, val + i, 1);
  			if (ret)
  				goto err;
  		}
-@@ -1374,8 +1443,9 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1443,9 +1374,8 @@ static int af9013_probe(struct i2c_client *client,
  		.write = af9013_regmap_write,
  	};
  	static const struct regmap_config regmap_config = {
--		.reg_bits    =  16,
--		.val_bits    =  8,
-+		/* Actual reg is 16 bits, see i2c adapter lock */
-+		.reg_bits = 24,
-+		.val_bits = 8,
+-		/* Actual reg is 16 bits, see i2c adapter lock */
+-		.reg_bits = 24,
+-		.val_bits = 8,
++		.reg_bits    =  16,
++		.val_bits    =  8,
  	};
  
  	state = kzalloc(sizeof(*state), GFP_KERNEL);
-@@ -1384,6 +1454,8 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1454,8 +1384,6 @@ static int af9013_probe(struct i2c_client *client,
  		goto err;
  	}
  
-+	dev_dbg(&client->dev, "\n");
-+
+-	dev_dbg(&client->dev, "\n");
+-
  	/* Setup the state */
  	state->client = client;
  	i2c_set_clientdata(client, state);
-@@ -1401,25 +1473,36 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1473,36 +1401,25 @@ static int af9013_probe(struct i2c_client *client,
  		ret = PTR_ERR(state->regmap);
  		goto err_kfree;
  	}
-+	/* Create mux i2c adapter */
-+	state->muxc = i2c_mux_alloc(client->adapter, &client->dev, 1, 0, 0,
-+				    af9013_select, af9013_deselect);
-+	if (!state->muxc) {
-+		ret = -ENOMEM;
-+		goto err_regmap_exit;
-+	}
-+	state->muxc->priv = state;
-+	ret = i2c_mux_add_adapter(state->muxc, 0, 0, 0);
-+	if (ret)
-+		goto err_regmap_exit;
+-	/* Create mux i2c adapter */
+-	state->muxc = i2c_mux_alloc(client->adapter, &client->dev, 1, 0, 0,
+-				    af9013_select, af9013_deselect);
+-	if (!state->muxc) {
+-		ret = -ENOMEM;
+-		goto err_regmap_exit;
+-	}
+-	state->muxc->priv = state;
+-	ret = i2c_mux_add_adapter(state->muxc, 0, 0, 0);
+-	if (ret)
+-		goto err_regmap_exit;
  
  	/* Download firmware */
  	if (state->ts_mode != AF9013_TS_MODE_USB) {
  		ret = af9013_download_firmware(state);
  		if (ret)
--			goto err_regmap_exit;
-+			goto err_i2c_mux_del_adapters;
+-			goto err_i2c_mux_del_adapters;
++			goto err_regmap_exit;
  	}
  
  	/* Firmware version */
  	ret = regmap_bulk_read(state->regmap, 0x5103, firmware_version,
  			       sizeof(firmware_version));
  	if (ret)
--		goto err_regmap_exit;
-+		goto err_i2c_mux_del_adapters;
+-		goto err_i2c_mux_del_adapters;
++		goto err_regmap_exit;
  
  	/* Set GPIOs */
  	for (i = 0; i < sizeof(state->gpio); i++) {
  		ret = af9013_set_gpio(state, i, state->gpio[i]);
  		if (ret)
--			goto err_regmap_exit;
-+			goto err_i2c_mux_del_adapters;
+-			goto err_i2c_mux_del_adapters;
++			goto err_regmap_exit;
  	}
  
  	/* Create dvb frontend */
-@@ -1428,6 +1511,7 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1511,7 +1428,6 @@ static int af9013_probe(struct i2c_client *client,
  
  	/* Setup callbacks */
  	pdata->get_dvb_frontend = af9013_get_dvb_frontend;
-+	pdata->get_i2c_adapter = af9013_get_i2c_adapter;
+-	pdata->get_i2c_adapter = af9013_get_i2c_adapter;
  	pdata->pid_filter = af9013_pid_filter;
  	pdata->pid_filter_ctrl = af9013_pid_filter_ctrl;
  
-@@ -1445,6 +1529,8 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1529,8 +1445,6 @@ static int af9013_probe(struct i2c_client *client,
  		 firmware_version[0], firmware_version[1],
  		 firmware_version[2], firmware_version[3]);
  	return 0;
-+err_i2c_mux_del_adapters:
-+	i2c_mux_del_adapters(state->muxc);
+-err_i2c_mux_del_adapters:
+-	i2c_mux_del_adapters(state->muxc);
  err_regmap_exit:
  	regmap_exit(state->regmap);
  err_kfree:
-@@ -1460,6 +1546,8 @@ static int af9013_remove(struct i2c_client *client)
+@@ -1546,8 +1460,6 @@ static int af9013_remove(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
-+	i2c_mux_del_adapters(state->muxc);
-+
+-	i2c_mux_del_adapters(state->muxc);
+-
  	regmap_exit(state->regmap);
  
  	kfree(state);
 diff --git a/drivers/media/dvb-frontends/af9013.h b/drivers/media/dvb-frontends/af9013.h
-index bdcb3df8aece..bbf1ccee7255 100644
+index bbf1ccee7255..bdcb3df8aece 100644
 --- a/drivers/media/dvb-frontends/af9013.h
 +++ b/drivers/media/dvb-frontends/af9013.h
-@@ -70,6 +70,7 @@ struct af9013_platform_data {
+@@ -70,7 +70,6 @@ struct af9013_platform_data {
  	u8 gpio[4];
  
  	struct dvb_frontend* (*get_dvb_frontend)(struct i2c_client *);
-+	struct i2c_adapter* (*get_i2c_adapter)(struct i2c_client *);
+-	struct i2c_adapter* (*get_i2c_adapter)(struct i2c_client *);
  	int (*pid_filter_ctrl)(struct dvb_frontend *, int);
  	int (*pid_filter)(struct dvb_frontend *, u8, u16, int);
  };
 diff --git a/drivers/media/dvb-frontends/af9013_priv.h b/drivers/media/dvb-frontends/af9013_priv.h
-index 59583dd56efc..3b9b9424fe1a 100644
+index 3b9b9424fe1a..59583dd56efc 100644
 --- a/drivers/media/dvb-frontends/af9013_priv.h
 +++ b/drivers/media/dvb-frontends/af9013_priv.h
-@@ -15,6 +15,7 @@
+@@ -15,7 +15,6 @@
  #include <media/dvb_math.h>
  #include "af9013.h"
  #include <linux/firmware.h>
-+#include <linux/i2c-mux.h>
+-#include <linux/i2c-mux.h>
  #include <linux/math64.h>
  #include <linux/regmap.h>
  
