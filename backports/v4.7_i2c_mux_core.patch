@@ -9,16 +9,16 @@ Signed-off-by: Antti Palosaari <crope@iki.fi>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@s-opensource.com>
 ---
  drivers/media/dvb-frontends/Kconfig       |   2 +-
- drivers/media/dvb-frontends/af9013.c      | 126 ++++++++++++++++++----
+ drivers/media/dvb-frontends/af9013.c      | 124 ++++++++++++++++++----
  drivers/media/dvb-frontends/af9013.h      |   1 +
  drivers/media/dvb-frontends/af9013_priv.h |   1 +
- 4 files changed, 111 insertions(+), 19 deletions(-)
+ 4 files changed, 109 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/media/dvb-frontends/Kconfig b/drivers/media/dvb-frontends/Kconfig
-index 687086cdb870d..0712069fd9fed 100644
+index f6be6cb09485..2ef2ff2a38ff 100644
 --- a/drivers/media/dvb-frontends/Kconfig
 +++ b/drivers/media/dvb-frontends/Kconfig
-@@ -462,7 +462,7 @@ config DVB_TDA10048
+@@ -324,7 +324,7 @@ comment "DVB-T (terrestrial) frontends"
  
  config DVB_AF9013
  	tristate "Afatech AF9013 demodulator"
@@ -28,10 +28,10 @@ index 687086cdb870d..0712069fd9fed 100644
  	default m if !MEDIA_SUBDRV_AUTOSELECT
  	help
 diff --git a/drivers/media/dvb-frontends/af9013.c b/drivers/media/dvb-frontends/af9013.c
-index 87a55cd67e033..d55c5f67ce0f2 100644
+index 7f52c0cf5dae..7d7c341b2bd8 100644
 --- a/drivers/media/dvb-frontends/af9013.c
 +++ b/drivers/media/dvb-frontends/af9013.c
-@@ -23,6 +23,7 @@
+@@ -13,6 +13,7 @@
  struct af9013_state {
  	struct i2c_client *client;
  	struct regmap *regmap;
@@ -39,7 +39,7 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  	struct dvb_frontend fe;
  	u32 clk;
  	u8 tuner;
-@@ -1257,9 +1258,65 @@ static struct dvb_frontend *af9013_get_dvb_frontend(struct i2c_client *client)
+@@ -1218,9 +1219,65 @@ static struct dvb_frontend *af9013_get_dvb_frontend(struct i2c_client *client)
  	return &state->fe;
  }
  
@@ -106,21 +106,20 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  {
  	int ret;
  	u8 buf[21];
-@@ -1281,7 +1338,12 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
- 	buf[1] = (reg >> 0) & 0xff;
+@@ -1243,7 +1300,11 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
  	buf[2] = cmd;
  	memcpy(&buf[3], val, len);
+ 
 -	ret = i2c_transfer(client->adapter, msg, 1);
-+
 +	if (lock)
-+		i2c_lock_adapter(client->adapter);
++		i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
 +	ret = __i2c_transfer(client->adapter, msg, 1);
 +	if (lock)
-+		i2c_unlock_adapter(client->adapter);
++		i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
  	if (ret < 0) {
  		goto err;
  	} else if (ret != 1) {
-@@ -1296,7 +1358,7 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
+@@ -1258,7 +1319,7 @@ static int af9013_wregs(struct i2c_client *client, u8 cmd, u16 reg,
  }
  
  static int af9013_rregs(struct i2c_client *client, u8 cmd, u16 reg,
@@ -129,21 +128,20 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  {
  	int ret;
  	u8 buf[3];
-@@ -1317,7 +1379,12 @@ static int af9013_rregs(struct i2c_client *client, u8 cmd, u16 reg,
- 	buf[0] = (reg >> 8) & 0xff;
+@@ -1280,7 +1341,11 @@ static int af9013_rregs(struct i2c_client *client, u8 cmd, u16 reg,
  	buf[1] = (reg >> 0) & 0xff;
  	buf[2] = cmd;
+ 
 -	ret = i2c_transfer(client->adapter, msg, 2);
-+
 +	if (lock)
-+		i2c_lock_adapter(client->adapter);
++		i2c_lock_bus(client->adapter, I2C_LOCK_SEGMENT);
 +	ret = __i2c_transfer(client->adapter, msg, 2);
 +	if (lock)
-+		i2c_unlock_adapter(client->adapter);
++		i2c_unlock_bus(client->adapter, I2C_LOCK_SEGMENT);
  	if (ret < 0) {
  		goto err;
  	} else if (ret != 2) {
-@@ -1337,25 +1404,27 @@ static int af9013_regmap_write(void *context, const void *data, size_t count)
+@@ -1300,25 +1365,27 @@ static int af9013_regmap_write(void *context, const void *data, size_t count)
  	struct af9013_state *state = i2c_get_clientdata(client);
  	int ret, i;
  	u8 cmd;
@@ -177,7 +175,7 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  			if (ret)
  				goto err;
  		}
-@@ -1374,19 +1443,21 @@ static int af9013_regmap_read(void *context, const void *reg_buf,
+@@ -1337,19 +1404,21 @@ static int af9013_regmap_read(void *context, const void *reg_buf,
  	struct af9013_state *state = i2c_get_clientdata(client);
  	int ret, i;
  	u8 cmd;
@@ -202,7 +200,7 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  			if (ret)
  				goto err;
  		}
-@@ -1411,8 +1482,9 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1374,8 +1443,9 @@ static int af9013_probe(struct i2c_client *client,
  		.write = af9013_regmap_write,
  	};
  	static const struct regmap_config regmap_config = {
@@ -214,7 +212,7 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  	};
  
  	state = kzalloc(sizeof(*state), GFP_KERNEL);
-@@ -1421,6 +1493,8 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1384,6 +1454,8 @@ static int af9013_probe(struct i2c_client *client,
  		goto err;
  	}
  
@@ -223,7 +221,7 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  	/* Setup the state */
  	state->client = client;
  	i2c_set_clientdata(client, state);
-@@ -1438,25 +1512,36 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1401,25 +1473,36 @@ static int af9013_probe(struct i2c_client *client,
  		ret = PTR_ERR(state->regmap);
  		goto err_kfree;
  	}
@@ -263,15 +261,15 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  	}
  
  	/* Create dvb frontend */
-@@ -1467,6 +1552,7 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1428,6 +1511,7 @@ static int af9013_probe(struct i2c_client *client,
  
  	/* Setup callbacks */
  	pdata->get_dvb_frontend = af9013_get_dvb_frontend;
 +	pdata->get_i2c_adapter = af9013_get_i2c_adapter;
+ 	pdata->pid_filter = af9013_pid_filter;
+ 	pdata->pid_filter_ctrl = af9013_pid_filter_ctrl;
  
- 	/* Init stats to indicate which stats are supported */
- 	c = &state->fe.dtv_property_cache;
-@@ -1482,6 +1568,8 @@ static int af9013_probe(struct i2c_client *client,
+@@ -1445,6 +1529,8 @@ static int af9013_probe(struct i2c_client *client,
  		 firmware_version[0], firmware_version[1],
  		 firmware_version[2], firmware_version[3]);
  	return 0;
@@ -280,7 +278,7 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  err_regmap_exit:
  	regmap_exit(state->regmap);
  err_kfree:
-@@ -1497,6 +1585,8 @@ static int af9013_remove(struct i2c_client *client)
+@@ -1460,6 +1546,8 @@ static int af9013_remove(struct i2c_client *client)
  
  	dev_dbg(&client->dev, "\n");
  
@@ -290,22 +288,22 @@ index 87a55cd67e033..d55c5f67ce0f2 100644
  
  	kfree(state);
 diff --git a/drivers/media/dvb-frontends/af9013.h b/drivers/media/dvb-frontends/af9013.h
-index a290722c04fd2..ea63ff9242f25 100644
+index bdcb3df8aece..bbf1ccee7255 100644
 --- a/drivers/media/dvb-frontends/af9013.h
 +++ b/drivers/media/dvb-frontends/af9013.h
-@@ -84,6 +84,7 @@ struct af9013_platform_data {
+@@ -70,6 +70,7 @@ struct af9013_platform_data {
  	u8 gpio[4];
  
  	struct dvb_frontend* (*get_dvb_frontend)(struct i2c_client *);
 +	struct i2c_adapter* (*get_i2c_adapter)(struct i2c_client *);
- 
- /* private: For legacy media attach wrapper. Do not set value. */
- 	bool attach_in_use;
+ 	int (*pid_filter_ctrl)(struct dvb_frontend *, int);
+ 	int (*pid_filter)(struct dvb_frontend *, u8, u16, int);
+ };
 diff --git a/drivers/media/dvb-frontends/af9013_priv.h b/drivers/media/dvb-frontends/af9013_priv.h
-index ec74edbb6d4df..3e95de7dba511 100644
+index 59583dd56efc..3b9b9424fe1a 100644
 --- a/drivers/media/dvb-frontends/af9013_priv.h
 +++ b/drivers/media/dvb-frontends/af9013_priv.h
-@@ -25,6 +25,7 @@
+@@ -15,6 +15,7 @@
  #include <media/dvb_math.h>
  #include "af9013.h"
  #include <linux/firmware.h>
@@ -313,3 +311,6 @@ index ec74edbb6d4df..3e95de7dba511 100644
  #include <linux/math64.h>
  #include <linux/regmap.h>
  
+-- 
+2.25.1
+
