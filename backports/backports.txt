@@ -142,6 +142,8 @@ add v4.7_pci_alloc_irq_vectors.patch
 add v4.7_copy_to_user_warning.patch
 add v4.7_objtool_warning.patch
 add v4.7_i2c_mux_core.patch
+add v4.7_af9013.patch
+add v4.7_af9015.patch
 
 [4.6.1023]
 add v4.6_i2c_mux.patch
