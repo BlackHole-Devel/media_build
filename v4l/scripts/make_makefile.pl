@@ -133,7 +133,8 @@ sub open_makefile($) {
 		}
 		if (/^\s*ccflags-.*=\s*(\S.*?)\s*$/) {
 			# print STDERR "cflags matched '$1'\n";
-			remove_includes($1, $orig);	# will print line for us
+			($tmp = $1) =~ s/\s//g;
+			remove_includes($tmp, $orig);   # will print line for us
 			next;
 		}
 		# Any flags should be added to already existing flags
