@@ -2,15 +2,15 @@ diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
 index 4d42418e603e..d4c35b9c7d75 100644
 --- a/drivers/media/v4l2-core/Makefile
 +++ b/drivers/media/v4l2-core/Makefile
-@@ -12,7 +12,7 @@ videodev-$(CONFIG_COMPAT) += v4l2-compat-ioctl32.o
- videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
- videodev-$(CONFIG_MEDIA_CONTROLLER) += v4l2-mc.o
- 
+@@ -26,7 +26,7 @@ videodev-$(CONFIG_VIDEO_V4L2_I2C) += v4l2-i2c.o
+
+ obj-$(CONFIG_V4L2_ASYNC) += v4l2-async.o
+ obj-$(CONFIG_V4L2_FLASH_LED_CLASS) += v4l2-flash-led-class.o
 -obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
 +#obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
- obj-$(CONFIG_VIDEO_V4L2) += videodev.o
- obj-$(CONFIG_VIDEO_V4L2) += v4l2-common.o
- obj-$(CONFIG_VIDEO_V4L2) += v4l2-dv-timings.o
+ obj-$(CONFIG_V4L2_H264) += v4l2-h264.o
+ obj-$(CONFIG_V4L2_JPEG_HELPER) += v4l2-jpeg.o
+ obj-$(CONFIG_V4L2_MEM2MEM_DEV) += v4l2-mem2mem.o
 diff --git a/include/media/media-entity.h b/include/media/media-entity.h
 index 8cb2c504a05c..3de214237d1c 100644
 --- a/include/media/media-entity.h
