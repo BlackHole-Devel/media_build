@@ -1,0 +1,115 @@
+From e3e9560742f43a44f060b6d9240e6d4c600f110f Mon Sep 17 00:00:00 2001
+From: dpeddi <1086815+dpeddi@users.noreply.github.com>
+Date: Sun, 3 Apr 2022 20:47:44 +0000
+Subject: [PATCH] reg_default
+
+---
+ drivers/media/dvb-frontends/m88ds3103.c |  2 +-
+ drivers/media/i2c/isl7998x.c            | 10 +++++-----
+ drivers/media/i2c/ov7740.c              | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/media/dvb-frontends/m88ds3103.c b/drivers/media/dvb-frontends/m88ds3103.c
+index 278d59a..e5b6111 100644
+--- a/drivers/media/dvb-frontends/m88ds3103.c
++++ b/drivers/media/dvb-frontends/m88ds3103.c
+@@ -627,7 +627,7 @@ static int m88ds3103_set_frontend(struct dvb_frontend *fe)
+ 	u16 u16tmp;
+ 	u32 tuner_frequency_khz, target_mclk, u32tmp;
+ 	s32 s32tmp;
+-	static const struct reg_sequence reset_buf[] = {
++	static const struct reg_default reset_buf[] = {
+ 		{0x07, 0x80}, {0x07, 0x00}
+ 	};
+ 
+diff --git a/drivers/media/i2c/isl7998x.c b/drivers/media/i2c/isl7998x.c
+index dc30685..8e4fe2e 100644
+--- a/drivers/media/i2c/isl7998x.c
++++ b/drivers/media/i2c/isl7998x.c
+@@ -310,7 +310,7 @@
+ #define ISL7998X_REG_P5_HIST_LINE_CNT_1		ISL7998X_REG(5, 0x3c)
+ #define ISL7998X_REG_P5_HIST_LINE_CNT_2		ISL7998X_REG(5, 0x3d)
+ 
+-static const struct reg_sequence isl7998x_init_seq_1[] = {
++static const struct reg_default isl7998x_init_seq_1[] = {
+ 	{ ISL7998X_REG_P0_SHORT_DIAG_IRQ_EN, 0xff },
+ 	{ ISL7998X_REG_PX_DEC_SDT(0x1), 0x00 },
+ 	{ ISL7998X_REG_PX_DEC_SHORT_DET_CTL_1(0x1), 0x03 },
+@@ -364,7 +364,7 @@ static const struct reg_sequence isl7998x_init_seq_1[] = {
+ 	{ ISL7998X_REG_P0_CLK_CTL_3, 0x4f },
+ };
+ 
+-static const struct reg_sequence isl7998x_init_seq_2[] = {
++static const struct reg_default isl7998x_init_seq_2[] = {
+ 	{ ISL7998X_REG_P5_LI_ENGINE_SYNC_CTL, 0x10 },
+ 	{ ISL7998X_REG_P5_LI_ENGINE_VC_ASSIGNMENT, 0xe4 },
+ 	{ ISL7998X_REG_P5_LI_ENGINE_TYPE_CTL, 0x00 },
+@@ -666,7 +666,7 @@ static int isl7998x_init(struct isl7998x *isl7998x)
+ {
+ 	const unsigned int lanes = isl7998x->nr_mipi_lanes;
+ 	const u32 isl7998x_video_in_chan_map[] = { 0x00, 0x11, 0x02, 0x02 };
+-	const struct reg_sequence isl7998x_init_seq_custom[] = {
++	const struct reg_default isl7998x_init_seq_custom[] = {
+ 		{ ISL7998X_REG_P0_VIDEO_IN_CHAN_CTL,
+ 		  isl7998x_video_in_chan_map[isl7998x->nr_inputs - 1] },
+ 		{ ISL7998X_REG_P0_CLK_CTL_4,
+@@ -704,11 +704,11 @@ static int isl7998x_init(struct isl7998x *isl7998x)
+ 
+ static int isl7998x_set_test_pattern(struct isl7998x *isl7998x)
+ {
+-	const struct reg_sequence isl7998x_init_seq_tpg_off[] = {
++	const struct reg_default isl7998x_init_seq_tpg_off[] = {
+ 		{ ISL7998X_REG_P5_LI_ENGINE_TP_GEN_CTL, 0 },
+ 		{ ISL7998X_REG_P5_LI_ENGINE_CTL_2, 0 }
+ 	};
+-	const struct reg_sequence isl7998x_init_seq_tpg_on[] = {
++	const struct reg_default isl7998x_init_seq_tpg_on[] = {
+ 		{ ISL7998X_REG_P5_TP_GEN_BAR_PATTERN,
+ 		  isl7998x->test_pattern_bars << 6 },
+ 		{ ISL7998X_REG_P5_LI_ENGINE_CTL_2,
+diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
+index 444aa2d..15c88b6 100644
+--- a/drivers/media/i2c/ov7740.c
++++ b/drivers/media/i2c/ov7740.c
+@@ -129,18 +129,18 @@ struct ov7740 {
+ struct ov7740_pixfmt {
+ 	u32 mbus_code;
+ 	enum v4l2_colorspace colorspace;
+-	const struct reg_sequence *regs;
++	const struct reg_default *regs;
+ 	u32 reg_num;
+ };
+ 
+ struct ov7740_framesize {
+ 	u16 width;
+ 	u16 height;
+-	const struct reg_sequence *regs;
++	const struct reg_default *regs;
+ 	u32 reg_num;
+ };
+ 
+-static const struct reg_sequence ov7740_vga[] = {
++static const struct reg_default ov7740_vga[] = {
+ 	{0x55, 0x40},
+ 	{0x11, 0x02},
+ 
+@@ -677,14 +677,14 @@ static const struct v4l2_subdev_video_ops ov7740_subdev_video_ops = {
+ 	.g_frame_interval = ov7740_g_frame_interval,
+ };
+ 
+-static const struct reg_sequence ov7740_format_yuyv[] = {
++static const struct reg_default ov7740_format_yuyv[] = {
+ 	{0x12, 0x00},
+ 	{0x36, 0x3f},
+ 	{0x80, 0x7f},
+ 	{0x83, 0x01},
+ };
+ 
+-static const struct reg_sequence ov7740_format_bggr8[] = {
++static const struct reg_default ov7740_format_bggr8[] = {
+ 	{0x36, 0x2f},
+ 	{0x80, 0x01},
+ 	{0x83, 0x04},
+-- 
+2.25.1
+

@@ -84,6 +84,7 @@ add v5.0_gpio.patch
 
 [4.20.1023]
 add v4.20_access_ok.patch
+add v4.2_reg_default.patch
 
 [4.18.1023]
 add v4.18_fwnode_args_args.patch
