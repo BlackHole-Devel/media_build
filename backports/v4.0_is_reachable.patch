@@ -1,0 +1,1270 @@
+diff --git a/drivers/media/dvb-frontends/af9013.h b/drivers/media/dvb-frontends/af9013.h
+index 850310b..ecafbff 100644
+--- a/drivers/media/dvb-frontends/af9013.h
++++ b/drivers/media/dvb-frontends/af9013.h
+@@ -91,7 +91,7 @@ struct af9013_platform_data {
+ #define AF9013_TS_PARALLEL  AF9013_TS_MODE_PARALLEL
+ #define AF9013_TS_SERIAL    AF9013_TS_MODE_SERIAL
+ 
+-#if IS_REACHABLE(CONFIG_DVB_AF9013)
++#if IS_ENABLED(CONFIG_DVB_AF9013)
+ /**
+  * Attach an af9013 demod
+  *
+diff --git a/drivers/media/dvb-frontends/ascot2e.h b/drivers/media/dvb-frontends/ascot2e.h
+index d86b3de..0d378d6 100644
+--- a/drivers/media/dvb-frontends/ascot2e.h
++++ b/drivers/media/dvb-frontends/ascot2e.h
+@@ -31,7 +31,7 @@ struct ascot2e_config {
+ 	int	(*set_tuner_callback)(void *, int);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ASCOT2E)
++#if IS_ENABLED(CONFIG_DVB_ASCOT2E)
+ /**
+  * ascot2e_attach - Attach an ascot2e tuner
+  *
+diff --git a/drivers/media/dvb-frontends/atbm8830.h b/drivers/media/dvb-frontends/atbm8830.h
+index 7cb0d98..1bf42a1 100644
+--- a/drivers/media/dvb-frontends/atbm8830.h
++++ b/drivers/media/dvb-frontends/atbm8830.h
+@@ -47,7 +47,7 @@ struct atbm8830_config {
+ 	u8 agc_hold_loop;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ATBM8830)
++#if IS_ENABLED(CONFIG_DVB_ATBM8830)
+ extern struct dvb_frontend *atbm8830_attach(const struct atbm8830_config *config,
+ 		struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/au8522.h b/drivers/media/dvb-frontends/au8522.h
+index 72e3328..f00c007 100644
+--- a/drivers/media/dvb-frontends/au8522.h
++++ b/drivers/media/dvb-frontends/au8522.h
+@@ -48,7 +48,7 @@ struct au8522_config {
+ 	enum au8522_if_freq qam_if;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_AU8522_DTV)
++#if IS_ENABLED(CONFIG_DVB_AU8522_DTV)
+ extern struct dvb_frontend *au8522_attach(const struct au8522_config *config,
+ 					  struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/bcm3510.h b/drivers/media/dvb-frontends/bcm3510.h
+index 43a7a8b..cddaa11 100644
+--- a/drivers/media/dvb-frontends/bcm3510.h
++++ b/drivers/media/dvb-frontends/bcm3510.h
+@@ -21,7 +21,7 @@ struct bcm3510_config
+ 	int (*request_firmware)(struct dvb_frontend* fe, const struct firmware **fw, char* name);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_BCM3510)
++#if IS_ENABLED(CONFIG_DVB_BCM3510)
+ extern struct dvb_frontend* bcm3510_attach(const struct bcm3510_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/cx22700.h b/drivers/media/dvb-frontends/cx22700.h
+index 178dd6b..a2f2b05 100644
+--- a/drivers/media/dvb-frontends/cx22700.h
++++ b/drivers/media/dvb-frontends/cx22700.h
+@@ -19,7 +19,7 @@ struct cx22700_config
+ 	u8 demod_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CX22700)
++#if IS_ENABLED(CONFIG_DVB_CX22700)
+ extern struct dvb_frontend* cx22700_attach(const struct cx22700_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/cx22702.h b/drivers/media/dvb-frontends/cx22702.h
+index cfae967..5e5762b 100644
+--- a/drivers/media/dvb-frontends/cx22702.h
++++ b/drivers/media/dvb-frontends/cx22702.h
+@@ -28,7 +28,7 @@ struct cx22702_config {
+ 	u8 output_mode;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CX22702)
++#if IS_ENABLED(CONFIG_DVB_CX22702)
+ extern struct dvb_frontend *cx22702_attach(
+ 	const struct cx22702_config *config,
+ 	struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/cx24110.h b/drivers/media/dvb-frontends/cx24110.h
+index 834b011..35af7d2 100644
+--- a/drivers/media/dvb-frontends/cx24110.h
++++ b/drivers/media/dvb-frontends/cx24110.h
+@@ -33,7 +33,7 @@ static inline int cx24110_pll_write(struct dvb_frontend *fe, u32 val)
+ 	return 0;
+ }
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CX24110)
++#if IS_ENABLED(CONFIG_DVB_CX24110)
+ extern struct dvb_frontend* cx24110_attach(const struct cx24110_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/cx24113.h b/drivers/media/dvb-frontends/cx24113.h
+index c5460c2..2c54ade 100644
+--- a/drivers/media/dvb-frontends/cx24113.h
++++ b/drivers/media/dvb-frontends/cx24113.h
+@@ -16,7 +16,7 @@ struct cx24113_config {
+ 	u32 xtal_khz;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TUNER_CX24113)
++#if IS_ENABLED(CONFIG_DVB_TUNER_CX24113)
+ extern struct dvb_frontend *cx24113_attach(struct dvb_frontend *,
+ 	const struct cx24113_config *config, struct i2c_adapter *i2c);
+ 
+diff --git a/drivers/media/dvb-frontends/cx24116.h b/drivers/media/dvb-frontends/cx24116.h
+index 1d2fab5..0b450bd 100644
+--- a/drivers/media/dvb-frontends/cx24116.h
++++ b/drivers/media/dvb-frontends/cx24116.h
+@@ -28,7 +28,7 @@ struct cx24116_config {
+ 	u16 i2c_wr_max;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CX24116)
++#if IS_ENABLED(CONFIG_DVB_CX24116)
+ extern struct dvb_frontend *cx24116_attach(
+ 	const struct cx24116_config *config,
+ 	struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/cx24117.h b/drivers/media/dvb-frontends/cx24117.h
+index a613a33..ef28ec0 100644
+--- a/drivers/media/dvb-frontends/cx24117.h
++++ b/drivers/media/dvb-frontends/cx24117.h
+@@ -17,7 +17,7 @@ struct cx24117_config {
+ 	u8 demod_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CX24117)
++#if IS_ENABLED(CONFIG_DVB_CX24117)
+ extern struct dvb_frontend *cx24117_attach(
+ 	const struct cx24117_config *config,
+ 	struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/cx24120.h b/drivers/media/dvb-frontends/cx24120.h
+index 371b1d3..a31c0f5 100644
+--- a/drivers/media/dvb-frontends/cx24120.h
++++ b/drivers/media/dvb-frontends/cx24120.h
+@@ -32,7 +32,7 @@ struct cx24120_config {
+ 	u16 i2c_wr_max;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CX24120)
++#if IS_ENABLED(CONFIG_DVB_CX24120)
+ struct dvb_frontend *cx24120_attach(const struct cx24120_config *config,
+ 				    struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/cx24123.h b/drivers/media/dvb-frontends/cx24123.h
+index dfda44e..2f61d89 100644
+--- a/drivers/media/dvb-frontends/cx24123.h
++++ b/drivers/media/dvb-frontends/cx24123.h
+@@ -26,7 +26,7 @@ struct cx24123_config {
+ 	void (*agc_callback) (struct dvb_frontend *);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CX24123)
++#if IS_ENABLED(CONFIG_DVB_CX24123)
+ extern struct dvb_frontend *cx24123_attach(const struct cx24123_config *config,
+ 					   struct i2c_adapter *i2c);
+ extern struct i2c_adapter *cx24123_get_tuner_i2c_adapter(struct dvb_frontend *);
+diff --git a/drivers/media/dvb-frontends/cxd2820r.h b/drivers/media/dvb-frontends/cxd2820r.h
+index 4aa6cf4..5afaac3 100644
+--- a/drivers/media/dvb-frontends/cxd2820r.h
++++ b/drivers/media/dvb-frontends/cxd2820r.h
+@@ -94,7 +94,7 @@ struct cxd2820r_config {
+ };
+ 
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CXD2820R)
++#if IS_ENABLED(CONFIG_DVB_CXD2820R)
+ /**
+  * cxd2820r_attach - Attach a cxd2820r demod
+  *
+diff --git a/drivers/media/dvb-frontends/cxd2841er.h b/drivers/media/dvb-frontends/cxd2841er.h
+index eb5467f..d8617b9 100644
+--- a/drivers/media/dvb-frontends/cxd2841er.h
++++ b/drivers/media/dvb-frontends/cxd2841er.h
+@@ -36,7 +36,7 @@ struct cxd2841er_config {
+ 	u32	flags;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CXD2841ER)
++#if IS_ENABLED(CONFIG_DVB_CXD2841ER)
+ extern struct dvb_frontend *cxd2841er_attach_s(struct cxd2841er_config *cfg,
+ 					       struct i2c_adapter *i2c);
+ 
+diff --git a/drivers/media/dvb-frontends/cxd2880/cxd2880.h b/drivers/media/dvb-frontends/cxd2880/cxd2880.h
+index 4ea3510..64878a6 100644
+--- a/drivers/media/dvb-frontends/cxd2880/cxd2880.h
++++ b/drivers/media/dvb-frontends/cxd2880/cxd2880.h
+@@ -14,7 +14,7 @@ struct cxd2880_config {
+ 	struct mutex *spi_mutex; /* For SPI access exclusive control */
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_CXD2880)
++#if IS_ENABLED(CONFIG_DVB_CXD2880)
+ extern struct dvb_frontend *cxd2880_attach(struct dvb_frontend *fe,
+ 					struct cxd2880_config *cfg);
+ #else
+diff --git a/drivers/media/dvb-frontends/dib0070.h b/drivers/media/dvb-frontends/dib0070.h
+index ae5c44e..e604741 100644
+--- a/drivers/media/dvb-frontends/dib0070.h
++++ b/drivers/media/dvb-frontends/dib0070.h
+@@ -45,7 +45,7 @@ struct dib0070_config {
+ 	u8 vga_filter;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TUNER_DIB0070)
++#if IS_ENABLED(CONFIG_DVB_TUNER_DIB0070)
+ extern struct dvb_frontend *dib0070_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, struct dib0070_config *cfg);
+ extern u16 dib0070_wbd_offset(struct dvb_frontend *);
+ extern void dib0070_ctrl_agc_filter(struct dvb_frontend *, u8 open);
+diff --git a/drivers/media/dvb-frontends/dib0090.h b/drivers/media/dvb-frontends/dib0090.h
+index e5cb311..03abbd1 100644
+--- a/drivers/media/dvb-frontends/dib0090.h
++++ b/drivers/media/dvb-frontends/dib0090.h
+@@ -72,7 +72,7 @@ struct dib0090_config {
+ 	u8 force_crystal_mode;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TUNER_DIB0090)
++#if IS_ENABLED(CONFIG_DVB_TUNER_DIB0090)
+ extern struct dvb_frontend *dib0090_register(struct dvb_frontend *fe, struct i2c_adapter *i2c, const struct dib0090_config *config);
+ extern struct dvb_frontend *dib0090_fw_register(struct dvb_frontend *fe, struct i2c_adapter *i2c, const struct dib0090_config *config);
+ extern void dib0090_dcc_freq(struct dvb_frontend *fe, u8 fast);
+diff --git a/drivers/media/dvb-frontends/dib3000.h b/drivers/media/dvb-frontends/dib3000.h
+index 3f129ef..58a33ed 100644
+--- a/drivers/media/dvb-frontends/dib3000.h
++++ b/drivers/media/dvb-frontends/dib3000.h
+@@ -37,7 +37,7 @@ struct dib_fe_xfer_ops
+ 	int (*tuner_pass_ctrl)(struct dvb_frontend *fe, int onoff, u8 pll_ctrl);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DIB3000MB)
++#if IS_ENABLED(CONFIG_DVB_DIB3000MB)
+ extern struct dvb_frontend* dib3000mb_attach(const struct dib3000_config* config,
+ 					     struct i2c_adapter* i2c, struct dib_fe_xfer_ops *xfer_ops);
+ #else
+diff --git a/drivers/media/dvb-frontends/dib3000mc.h b/drivers/media/dvb-frontends/dib3000mc.h
+index 5ed3d91..476a65e 100644
+--- a/drivers/media/dvb-frontends/dib3000mc.h
++++ b/drivers/media/dvb-frontends/dib3000mc.h
+@@ -36,7 +36,7 @@ struct dib3000mc_config {
+ #define DEFAULT_DIB3000MC_I2C_ADDRESS 16
+ #define DEFAULT_DIB3000P_I2C_ADDRESS  24
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DIB3000MC)
++#if IS_ENABLED(CONFIG_DVB_DIB3000MC)
+ extern struct dvb_frontend *dib3000mc_attach(struct i2c_adapter *i2c_adap,
+ 					     u8 i2c_addr,
+ 					     struct dib3000mc_config *cfg);
+diff --git a/drivers/media/dvb-frontends/dib7000m.h b/drivers/media/dvb-frontends/dib7000m.h
+index df7ecb4..b66c80c 100644
+--- a/drivers/media/dvb-frontends/dib7000m.h
++++ b/drivers/media/dvb-frontends/dib7000m.h
+@@ -39,7 +39,7 @@ struct dib7000m_config {
+ 
+ #define DEFAULT_DIB7000M_I2C_ADDRESS 18
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DIB7000M)
++#if IS_ENABLED(CONFIG_DVB_DIB7000M)
+ extern struct dvb_frontend *dib7000m_attach(struct i2c_adapter *i2c_adap,
+ 					    u8 i2c_addr,
+ 					    struct dib7000m_config *cfg);
+diff --git a/drivers/media/dvb-frontends/dib7000p.h b/drivers/media/dvb-frontends/dib7000p.h
+index 2e10b5c..9ce6556 100644
+--- a/drivers/media/dvb-frontends/dib7000p.h
++++ b/drivers/media/dvb-frontends/dib7000p.h
+@@ -65,7 +65,7 @@ struct dib7000p_ops {
+ 	struct dvb_frontend *(*init)(struct i2c_adapter *i2c_adap, u8 i2c_addr, struct dib7000p_config *cfg);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DIB7000P)
++#if IS_ENABLED(CONFIG_DVB_DIB7000P)
+ void *dib7000p_attach(struct dib7000p_ops *ops);
+ #else
+ static inline void *dib7000p_attach(struct dib7000p_ops *ops)
+diff --git a/drivers/media/dvb-frontends/dib8000.h b/drivers/media/dvb-frontends/dib8000.h
+index b920fe7..1544723 100644
+--- a/drivers/media/dvb-frontends/dib8000.h
++++ b/drivers/media/dvb-frontends/dib8000.h
+@@ -63,7 +63,7 @@ struct dib8000_ops {
+ 	struct dvb_frontend *(*init)(struct i2c_adapter *i2c_adap, u8 i2c_addr, struct dib8000_config *cfg);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DIB8000)
++#if IS_ENABLED(CONFIG_DVB_DIB8000)
+ void *dib8000_attach(struct dib8000_ops *ops);
+ #else
+ static inline void *dib8000_attach(struct dib8000_ops *ops)
+diff --git a/drivers/media/dvb-frontends/dib9000.h b/drivers/media/dvb-frontends/dib9000.h
+index bb03362..3ea7635 100644
+--- a/drivers/media/dvb-frontends/dib9000.h
++++ b/drivers/media/dvb-frontends/dib9000.h
+@@ -28,7 +28,7 @@ struct dib9000_config {
+ 
+ #define DEFAULT_DIB9000_I2C_ADDRESS 18
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DIB9000)
++#if IS_ENABLED(CONFIG_DVB_DIB9000)
+ extern struct dvb_frontend *dib9000_attach(struct i2c_adapter *i2c_adap, u8 i2c_addr, const struct dib9000_config *cfg);
+ extern int dib9000_i2c_enumeration(struct i2c_adapter *host, int no_of_demods, u8 default_addr, u8 first_addr);
+ extern struct i2c_adapter *dib9000_get_tuner_interface(struct dvb_frontend *fe);
+diff --git a/drivers/media/dvb-frontends/drx39xyj/drx39xxj.h b/drivers/media/dvb-frontends/drx39xyj/drx39xxj.h
+index 4d83ce5..b66f763 100644
+--- a/drivers/media/dvb-frontends/drx39xyj/drx39xxj.h
++++ b/drivers/media/dvb-frontends/drx39xyj/drx39xxj.h
+@@ -20,7 +20,7 @@ struct drx39xxj_state {
+ 	const struct firmware *fw;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DRX39XYJ)
++#if IS_ENABLED(CONFIG_DVB_DRX39XYJ)
+ struct dvb_frontend *drx39xxj_attach(struct i2c_adapter *i2c);
+ #else
+ static inline struct dvb_frontend *drx39xxj_attach(struct i2c_adapter *i2c) {
+diff --git a/drivers/media/dvb-frontends/drxd.h b/drivers/media/dvb-frontends/drxd.h
+index ba54fd9..bd19fa4 100644
+--- a/drivers/media/dvb-frontends/drxd.h
++++ b/drivers/media/dvb-frontends/drxd.h
+@@ -35,7 +35,7 @@ struct drxd_config {
+ 	 s16(*osc_deviation) (void *priv, s16 dev, int flag);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DRXD)
++#if IS_ENABLED(CONFIG_DVB_DRXD)
+ extern
+ struct dvb_frontend *drxd_attach(const struct drxd_config *config,
+ 				 void *priv, struct i2c_adapter *i2c,
+diff --git a/drivers/media/dvb-frontends/drxk.h b/drivers/media/dvb-frontends/drxk.h
+index 69fdca0..4af0641 100644
+--- a/drivers/media/dvb-frontends/drxk.h
++++ b/drivers/media/dvb-frontends/drxk.h
+@@ -52,7 +52,7 @@ struct drxk_config {
+ 	int		 qam_demod_parameter_count;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DRXK)
++#if IS_ENABLED(CONFIG_DVB_DRXK)
+ /**
+  * drxk_attach - Attach a drxk demod
+  *
+diff --git a/drivers/media/dvb-frontends/ds3000.h b/drivers/media/dvb-frontends/ds3000.h
+index cd24fa4..c36b613 100644
+--- a/drivers/media/dvb-frontends/ds3000.h
++++ b/drivers/media/dvb-frontends/ds3000.h
+@@ -22,7 +22,7 @@ struct ds3000_config {
+ 	void (*set_lock_led)(struct dvb_frontend *fe, int offon);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DS3000)
++#if IS_ENABLED(CONFIG_DVB_DS3000)
+ extern struct dvb_frontend *ds3000_attach(const struct ds3000_config *config,
+ 					struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/dvb-pll.h b/drivers/media/dvb-frontends/dvb-pll.h
+index 7183888..40f0c67 100644
+--- a/drivers/media/dvb-frontends/dvb-pll.h
++++ b/drivers/media/dvb-frontends/dvb-pll.h
+@@ -36,7 +36,7 @@ struct dvb_pll_config {
+ 	struct dvb_frontend *fe;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_PLL)
++#if IS_ENABLED(CONFIG_DVB_PLL)
+ /**
+  * dvb_pll_attach - Attach a dvb-pll to the supplied frontend structure.
+  *
+diff --git a/drivers/media/dvb-frontends/dvb_dummy_fe.h b/drivers/media/dvb-frontends/dvb_dummy_fe.h
+index 463abf5..b90be51 100644
+--- a/drivers/media/dvb-frontends/dvb_dummy_fe.h
++++ b/drivers/media/dvb-frontends/dvb_dummy_fe.h
+@@ -11,7 +11,7 @@
+ #include <linux/dvb/frontend.h>
+ #include <media/dvb_frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_DVB_DUMMY_FE)
++#if IS_ENABLED(CONFIG_DVB_DUMMY_FE)
+ struct dvb_frontend *dvb_dummy_fe_ofdm_attach(void);
+ struct dvb_frontend *dvb_dummy_fe_qpsk_attach(void);
+ struct dvb_frontend *dvb_dummy_fe_qam_attach(void);
+diff --git a/drivers/media/dvb-frontends/ec100.h b/drivers/media/dvb-frontends/ec100.h
+index 398dba6..3b8da37 100644
+--- a/drivers/media/dvb-frontends/ec100.h
++++ b/drivers/media/dvb-frontends/ec100.h
+@@ -16,7 +16,7 @@ struct ec100_config {
+ };
+ 
+ 
+-#if IS_REACHABLE(CONFIG_DVB_EC100)
++#if IS_ENABLED(CONFIG_DVB_EC100)
+ extern struct dvb_frontend *ec100_attach(const struct ec100_config *config,
+ 	struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/helene.h b/drivers/media/dvb-frontends/helene.h
+index 32e0b1f..21e574e 100644
+--- a/drivers/media/dvb-frontends/helene.h
++++ b/drivers/media/dvb-frontends/helene.h
+@@ -42,7 +42,7 @@ struct helene_config {
+ 	struct dvb_frontend *fe;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_HELENE)
++#if IS_ENABLED(CONFIG_DVB_HELENE)
+ /**
+  * helene_attach - Attach a helene tuner (terrestrial and cable standards)
+  *
+diff --git a/drivers/media/dvb-frontends/horus3a.h b/drivers/media/dvb-frontends/horus3a.h
+index 91dbe20..60ab097 100644
+--- a/drivers/media/dvb-frontends/horus3a.h
++++ b/drivers/media/dvb-frontends/horus3a.h
+@@ -31,7 +31,7 @@ struct horus3a_config {
+ 	int	(*set_tuner_callback)(void *, int);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_HORUS3A)
++#if IS_ENABLED(CONFIG_DVB_HORUS3A)
+ /**
+  * horus3a_attach - Attach a horus3a tuner
+  *
+diff --git a/drivers/media/dvb-frontends/isl6405.h b/drivers/media/dvb-frontends/isl6405.h
+index c1cb131..554d141 100644
+--- a/drivers/media/dvb-frontends/isl6405.h
++++ b/drivers/media/dvb-frontends/isl6405.h
+@@ -38,7 +38,7 @@
+ #define ISL6405_ENT2	0x20
+ #define ISL6405_ISEL2	0x40
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ISL6405)
++#if IS_ENABLED(CONFIG_DVB_ISL6405)
+ /* override_set and override_clear control which system register bits (above)
+  * to always set & clear
+  */
+diff --git a/drivers/media/dvb-frontends/isl6421.h b/drivers/media/dvb-frontends/isl6421.h
+index e594877..61abbc0 100644
+--- a/drivers/media/dvb-frontends/isl6421.h
++++ b/drivers/media/dvb-frontends/isl6421.h
+@@ -22,7 +22,7 @@
+ #define ISL6421_ISEL1	0x20
+ #define ISL6421_DCL	0x40
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ISL6421)
++#if IS_ENABLED(CONFIG_DVB_ISL6421)
+ /* override_set and override_clear control which system register bits (above) to always set & clear */
+ extern struct dvb_frontend *isl6421_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, u8 i2c_addr,
+ 			  u8 override_set, u8 override_clear, bool override_tone);
+diff --git a/drivers/media/dvb-frontends/isl6423.h b/drivers/media/dvb-frontends/isl6423.h
+index 9fa87ce..2654ea2 100644
+--- a/drivers/media/dvb-frontends/isl6423.h
++++ b/drivers/media/dvb-frontends/isl6423.h
+@@ -30,7 +30,7 @@ struct isl6423_config {
+ 	u8 mod_extern;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ISL6423)
++#if IS_ENABLED(CONFIG_DVB_ISL6423)
+ 
+ 
+ extern struct dvb_frontend *isl6423_attach(struct dvb_frontend *fe,
+diff --git a/drivers/media/dvb-frontends/itd1000.h b/drivers/media/dvb-frontends/itd1000.h
+index 3539c69..a41869b 100644
+--- a/drivers/media/dvb-frontends/itd1000.h
++++ b/drivers/media/dvb-frontends/itd1000.h
+@@ -15,7 +15,7 @@ struct itd1000_config {
+ 	u8 i2c_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TUNER_ITD1000)
++#if IS_ENABLED(CONFIG_DVB_TUNER_ITD1000)
+ extern struct dvb_frontend *itd1000_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, struct itd1000_config *cfg);
+ #else
+ static inline struct dvb_frontend *itd1000_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, struct itd1000_config *cfg)
+diff --git a/drivers/media/dvb-frontends/ix2505v.h b/drivers/media/dvb-frontends/ix2505v.h
+index 1755691..9617524 100644
+--- a/drivers/media/dvb-frontends/ix2505v.h
++++ b/drivers/media/dvb-frontends/ix2505v.h
+@@ -29,7 +29,7 @@ struct ix2505v_config {
+ 
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_IX2505V)
++#if IS_ENABLED(CONFIG_DVB_IX2505V)
+ /**
+  * ix2505v_attach - Attach a ix2505v tuner to the supplied frontend structure.
+  *
+diff --git a/drivers/media/dvb-frontends/l64781.h b/drivers/media/dvb-frontends/l64781.h
+index 41d55f6..4a4bec2 100644
+--- a/drivers/media/dvb-frontends/l64781.h
++++ b/drivers/media/dvb-frontends/l64781.h
+@@ -19,7 +19,7 @@ struct l64781_config
+ 	u8 demod_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_L64781)
++#if IS_ENABLED(CONFIG_DVB_L64781)
+ extern struct dvb_frontend* l64781_attach(const struct l64781_config* config,
+ 					  struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/lg2160.h b/drivers/media/dvb-frontends/lg2160.h
+index 17ddf68..0f316b9 100644
+--- a/drivers/media/dvb-frontends/lg2160.h
++++ b/drivers/media/dvb-frontends/lg2160.h
+@@ -52,7 +52,7 @@ struct lg2160_config {
+ 	enum lg_chip_type lg_chip;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LG2160)
++#if IS_ENABLED(CONFIG_DVB_LG2160)
+ extern
+ struct dvb_frontend *lg2160_attach(const struct lg2160_config *config,
+ 				     struct i2c_adapter *i2c_adap);
+diff --git a/drivers/media/dvb-frontends/lgdt3305.h b/drivers/media/dvb-frontends/lgdt3305.h
+index 3718cf8..25710d7 100644
+--- a/drivers/media/dvb-frontends/lgdt3305.h
++++ b/drivers/media/dvb-frontends/lgdt3305.h
+@@ -65,7 +65,7 @@ struct lgdt3305_config {
+ 	enum lgdt_demod_chip_type demod_chip;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LGDT3305)
++#if IS_ENABLED(CONFIG_DVB_LGDT3305)
+ extern
+ struct dvb_frontend *lgdt3305_attach(const struct lgdt3305_config *config,
+ 				     struct i2c_adapter *i2c_adap);
+diff --git a/drivers/media/dvb-frontends/lgdt3306a.h b/drivers/media/dvb-frontends/lgdt3306a.h
+index 4bbcd48..aa8a4ed 100644
+--- a/drivers/media/dvb-frontends/lgdt3306a.h
++++ b/drivers/media/dvb-frontends/lgdt3306a.h
+@@ -55,7 +55,7 @@ struct lgdt3306a_config {
+ 	struct i2c_adapter **i2c_adapter;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LGDT3306A)
++#if IS_ENABLED(CONFIG_DVB_LGDT3306A)
+ struct dvb_frontend *lgdt3306a_attach(const struct lgdt3306a_config *config,
+ 				      struct i2c_adapter *i2c_adap);
+ #else
+diff --git a/drivers/media/dvb-frontends/lgdt330x.h b/drivers/media/dvb-frontends/lgdt330x.h
+index 99834aa..928ed55 100644
+--- a/drivers/media/dvb-frontends/lgdt330x.h
++++ b/drivers/media/dvb-frontends/lgdt330x.h
+@@ -42,7 +42,7 @@ struct lgdt330x_config
+ 	struct dvb_frontend* (*get_dvb_frontend)(struct i2c_client *);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LGDT330X)
++#if IS_ENABLED(CONFIG_DVB_LGDT330X)
+ struct dvb_frontend *lgdt330x_attach(const struct lgdt330x_config *config,
+ 				     u8 demod_address,
+ 				     struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/lgs8gl5.h b/drivers/media/dvb-frontends/lgs8gl5.h
+index 1ea9c4b..32c829b 100644
+--- a/drivers/media/dvb-frontends/lgs8gl5.h
++++ b/drivers/media/dvb-frontends/lgs8gl5.h
+@@ -18,7 +18,7 @@ struct lgs8gl5_config {
+ 	u8 demod_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LGS8GL5)
++#if IS_ENABLED(CONFIG_DVB_LGS8GL5)
+ extern struct dvb_frontend *lgs8gl5_attach(
+ 	const struct lgs8gl5_config *config, struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/lgs8gxx.h b/drivers/media/dvb-frontends/lgs8gxx.h
+index 5b2f13a..3d91471 100644
+--- a/drivers/media/dvb-frontends/lgs8gxx.h
++++ b/drivers/media/dvb-frontends/lgs8gxx.h
+@@ -65,7 +65,7 @@ struct lgs8gxx_config {
+ 	u8 tuner_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LGS8GXX)
++#if IS_ENABLED(CONFIG_DVB_LGS8GXX)
+ extern struct dvb_frontend *lgs8gxx_attach(const struct lgs8gxx_config *config,
+ 					   struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/lnbh24.h b/drivers/media/dvb-frontends/lnbh24.h
+index d8d0303..2a8f835 100644
+--- a/drivers/media/dvb-frontends/lnbh24.h
++++ b/drivers/media/dvb-frontends/lnbh24.h
+@@ -21,7 +21,7 @@
+ 
+ #include <linux/dvb/frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LNBP21)
++#if IS_ENABLED(CONFIG_DVB_LNBP21)
+ /* override_set and override_clear control which
+    system register bits (above) to always set & clear */
+ extern struct dvb_frontend *lnbh24_attach(struct dvb_frontend *fe,
+diff --git a/drivers/media/dvb-frontends/lnbh25.h b/drivers/media/dvb-frontends/lnbh25.h
+index 4f68f0c..007b6ad 100644
+--- a/drivers/media/dvb-frontends/lnbh25.h
++++ b/drivers/media/dvb-frontends/lnbh25.h
+@@ -27,7 +27,7 @@ struct lnbh25_config {
+ 	u8	data2_config;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LNBH25)
++#if IS_ENABLED(CONFIG_DVB_LNBH25)
+ struct dvb_frontend *lnbh25_attach(
+ 	struct dvb_frontend *fe,
+ 	struct lnbh25_config *cfg,
+diff --git a/drivers/media/dvb-frontends/lnbh29.h b/drivers/media/dvb-frontends/lnbh29.h
+index 6179921..9a30269 100644
+--- a/drivers/media/dvb-frontends/lnbh29.h
++++ b/drivers/media/dvb-frontends/lnbh29.h
+@@ -19,7 +19,7 @@ struct lnbh29_config {
+ 	u8 data_config;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LNBH29)
++#if IS_ENABLED(CONFIG_DVB_LNBH29)
+ struct dvb_frontend *lnbh29_attach(struct dvb_frontend *fe,
+ 				   struct lnbh29_config *cfg,
+ 				   struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/lnbp21.h b/drivers/media/dvb-frontends/lnbp21.h
+index f17cf2b..1471dc1 100644
+--- a/drivers/media/dvb-frontends/lnbp21.h
++++ b/drivers/media/dvb-frontends/lnbp21.h
+@@ -38,7 +38,7 @@
+ 
+ #include <linux/dvb/frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LNBP21)
++#if IS_ENABLED(CONFIG_DVB_LNBP21)
+ /* override_set and override_clear control which
+  system register bits (above) to always set & clear */
+ extern struct dvb_frontend *lnbp21_attach(struct dvb_frontend *fe,
+diff --git a/drivers/media/dvb-frontends/lnbp22.h b/drivers/media/dvb-frontends/lnbp22.h
+index 35810d9..08b9bfe 100644
+--- a/drivers/media/dvb-frontends/lnbp22.h
++++ b/drivers/media/dvb-frontends/lnbp22.h
+@@ -20,7 +20,7 @@
+ 
+ #include <linux/dvb/frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_DVB_LNBP22)
++#if IS_ENABLED(CONFIG_DVB_LNBP22)
+ /*
+  * override_set and override_clear control which system register bits (above)
+  * to always set & clear
+diff --git a/drivers/media/dvb-frontends/m88rs2000.h b/drivers/media/dvb-frontends/m88rs2000.h
+index 3a141b0..2d62cd4 100644
+--- a/drivers/media/dvb-frontends/m88rs2000.h
++++ b/drivers/media/dvb-frontends/m88rs2000.h
+@@ -28,7 +28,7 @@ enum {
+ 	CALL_IS_READ,
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_M88RS2000)
++#if IS_ENABLED(CONFIG_DVB_M88RS2000)
+ extern struct dvb_frontend *m88rs2000_attach(
+ 	const struct m88rs2000_config *config, struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/mb86a16.h b/drivers/media/dvb-frontends/mb86a16.h
+index c0c5419..0ae0dbd 100644
+--- a/drivers/media/dvb-frontends/mb86a16.h
++++ b/drivers/media/dvb-frontends/mb86a16.h
+@@ -22,7 +22,7 @@ struct mb86a16_config {
+ 
+ 
+ 
+-#if IS_REACHABLE(CONFIG_DVB_MB86A16)
++#if IS_ENABLED(CONFIG_DVB_MB86A16)
+ 
+ extern struct dvb_frontend *mb86a16_attach(const struct mb86a16_config *config,
+ 					   struct i2c_adapter *i2c_adap);
+diff --git a/drivers/media/dvb-frontends/mb86a20s.h b/drivers/media/dvb-frontends/mb86a20s.h
+index d20d22b..15fd3b9 100644
+--- a/drivers/media/dvb-frontends/mb86a20s.h
++++ b/drivers/media/dvb-frontends/mb86a20s.h
+@@ -24,7 +24,7 @@ struct mb86a20s_config {
+ 	bool	is_serial;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_MB86A20S)
++#if IS_ENABLED(CONFIG_DVB_MB86A20S)
+ /**
+  * mb86a20s_attach - Attach a mb86a20s demod
+  *
+diff --git a/drivers/media/dvb-frontends/mt312.h b/drivers/media/dvb-frontends/mt312.h
+index 2182851..ce04c07 100644
+--- a/drivers/media/dvb-frontends/mt312.h
++++ b/drivers/media/dvb-frontends/mt312.h
+@@ -23,7 +23,7 @@ struct mt312_config {
+ 	unsigned int voltage_inverted:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_MT312)
++#if IS_ENABLED(CONFIG_DVB_MT312)
+ struct dvb_frontend *mt312_attach(const struct mt312_config *config,
+ 					struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/mt352.h b/drivers/media/dvb-frontends/mt352.h
+index acb1c33..e6f2db2 100644
+--- a/drivers/media/dvb-frontends/mt352.h
++++ b/drivers/media/dvb-frontends/mt352.h
+@@ -37,7 +37,7 @@ struct mt352_config
+ 	int (*demod_init)(struct dvb_frontend* fe);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_MT352)
++#if IS_ENABLED(CONFIG_DVB_MT352)
+ extern struct dvb_frontend* mt352_attach(const struct mt352_config* config,
+ 					 struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/mxl5xx.h b/drivers/media/dvb-frontends/mxl5xx.h
+index 139e16b..b951531 100644
+--- a/drivers/media/dvb-frontends/mxl5xx.h
++++ b/drivers/media/dvb-frontends/mxl5xx.h
+@@ -33,7 +33,7 @@ struct mxl5xx_cfg {
+ 	void *fw_priv;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_MXL5XX)
++#if IS_ENABLED(CONFIG_DVB_MXL5XX)
+ 
+ extern struct dvb_frontend *mxl5xx_attach(struct i2c_adapter *i2c,
+ 	struct mxl5xx_cfg *cfg, u32 demod, u32 tuner,
+diff --git a/drivers/media/dvb-frontends/nxt200x.h b/drivers/media/dvb-frontends/nxt200x.h
+index 6b03aeb..f40c498 100644
+--- a/drivers/media/dvb-frontends/nxt200x.h
++++ b/drivers/media/dvb-frontends/nxt200x.h
+@@ -28,7 +28,7 @@ struct nxt200x_config
+ 	int (*set_ts_params)(struct dvb_frontend* fe, int is_punctured);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_NXT200X)
++#if IS_ENABLED(CONFIG_DVB_NXT200X)
+ extern struct dvb_frontend* nxt200x_attach(const struct nxt200x_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/nxt6000.h b/drivers/media/dvb-frontends/nxt6000.h
+index 28d965e..1d1ba9d 100644
+--- a/drivers/media/dvb-frontends/nxt6000.h
++++ b/drivers/media/dvb-frontends/nxt6000.h
+@@ -21,7 +21,7 @@ struct nxt6000_config
+ 	u8 clock_inversion:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_NXT6000)
++#if IS_ENABLED(CONFIG_DVB_NXT6000)
+ extern struct dvb_frontend* nxt6000_attach(const struct nxt6000_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/or51132.h b/drivers/media/dvb-frontends/or51132.h
+index 75592cd..1498a93 100644
+--- a/drivers/media/dvb-frontends/or51132.h
++++ b/drivers/media/dvb-frontends/or51132.h
+@@ -20,7 +20,7 @@ struct or51132_config
+ 	int (*set_ts_params)(struct dvb_frontend* fe, int is_punctured);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_OR51132)
++#if IS_ENABLED(CONFIG_DVB_OR51132)
+ extern struct dvb_frontend* or51132_attach(const struct or51132_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/or51211.h b/drivers/media/dvb-frontends/or51211.h
+index 1d07639..13d4018 100644
+--- a/drivers/media/dvb-frontends/or51211.h
++++ b/drivers/media/dvb-frontends/or51211.h
+@@ -23,7 +23,7 @@ struct or51211_config
+ 	void (*sleep)(struct dvb_frontend * fe);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_OR51211)
++#if IS_ENABLED(CONFIG_DVB_OR51211)
+ extern struct dvb_frontend* or51211_attach(const struct or51211_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/s5h1409.h b/drivers/media/dvb-frontends/s5h1409.h
+index f6063e4..c69d1e1 100644
+--- a/drivers/media/dvb-frontends/s5h1409.h
++++ b/drivers/media/dvb-frontends/s5h1409.h
+@@ -54,7 +54,7 @@ struct s5h1409_config {
+ 	u8 hvr1600_opt;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_S5H1409)
++#if IS_ENABLED(CONFIG_DVB_S5H1409)
+ extern struct dvb_frontend *s5h1409_attach(const struct s5h1409_config *config,
+ 					   struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/s5h1411.h b/drivers/media/dvb-frontends/s5h1411.h
+index 939bac3..c3f3405 100644
+--- a/drivers/media/dvb-frontends/s5h1411.h
++++ b/drivers/media/dvb-frontends/s5h1411.h
+@@ -56,7 +56,7 @@ struct s5h1411_config {
+ 	u8 status_mode;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_S5H1411)
++#if IS_ENABLED(CONFIG_DVB_S5H1411)
+ extern struct dvb_frontend *s5h1411_attach(const struct s5h1411_config *config,
+ 					   struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/s5h1420.h b/drivers/media/dvb-frontends/s5h1420.h
+index f5da808..4057690 100644
+--- a/drivers/media/dvb-frontends/s5h1420.h
++++ b/drivers/media/dvb-frontends/s5h1420.h
+@@ -26,7 +26,7 @@ struct s5h1420_config
+ 	u8 serial_mpeg:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_S5H1420)
++#if IS_ENABLED(CONFIG_DVB_S5H1420)
+ extern struct dvb_frontend *s5h1420_attach(const struct s5h1420_config *config,
+ 	     struct i2c_adapter *i2c);
+ extern struct i2c_adapter *s5h1420_get_tuner_i2c_adapter(struct dvb_frontend *fe);
+diff --git a/drivers/media/dvb-frontends/s5h1432.h b/drivers/media/dvb-frontends/s5h1432.h
+index f031c06..bf1bf5b 100644
+--- a/drivers/media/dvb-frontends/s5h1432.h
++++ b/drivers/media/dvb-frontends/s5h1432.h
+@@ -60,7 +60,7 @@ struct s5h1432_config {
+ 	u8 status_mode;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_S5H1432)
++#if IS_ENABLED(CONFIG_DVB_S5H1432)
+ extern struct dvb_frontend *s5h1432_attach(const struct s5h1432_config *config,
+ 					   struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/s921.h b/drivers/media/dvb-frontends/s921.h
+index 436fc79..7cd8cdb 100644
+--- a/drivers/media/dvb-frontends/s921.h
++++ b/drivers/media/dvb-frontends/s921.h
+@@ -16,7 +16,7 @@ struct s921_config {
+ 	u8 demod_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_S921)
++#if IS_ENABLED(CONFIG_DVB_S921)
+ extern struct dvb_frontend *s921_attach(const struct s921_config *config,
+ 					   struct i2c_adapter *i2c);
+ extern struct i2c_adapter *s921_get_tuner_i2c_adapter(struct dvb_frontend *);
+diff --git a/drivers/media/dvb-frontends/si21xx.h b/drivers/media/dvb-frontends/si21xx.h
+index 12fa1d5..7c7a75c 100644
+--- a/drivers/media/dvb-frontends/si21xx.h
++++ b/drivers/media/dvb-frontends/si21xx.h
+@@ -13,7 +13,7 @@ struct si21xx_config {
+ 	int min_delay_ms;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_SI21XX)
++#if IS_ENABLED(CONFIG_DVB_SI21XX)
+ extern struct dvb_frontend *si21xx_attach(const struct si21xx_config *config,
+ 						struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/sp887x.h b/drivers/media/dvb-frontends/sp887x.h
+index a680cc2..4cbcdb7 100644
+--- a/drivers/media/dvb-frontends/sp887x.h
++++ b/drivers/media/dvb-frontends/sp887x.h
+@@ -18,7 +18,7 @@ struct sp887x_config
+ 	int (*request_firmware)(struct dvb_frontend* fe, const struct firmware **fw, char* name);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_SP887X)
++#if IS_ENABLED(CONFIG_DVB_SP887X)
+ extern struct dvb_frontend* sp887x_attach(const struct sp887x_config* config,
+ 					  struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/stb0899_drv.h b/drivers/media/dvb-frontends/stb0899_drv.h
+index 5a99f0b..a1b7cff 100644
+--- a/drivers/media/dvb-frontends/stb0899_drv.h
++++ b/drivers/media/dvb-frontends/stb0899_drv.h
+@@ -129,7 +129,7 @@ struct stb0899_config {
+ 	int (*tuner_set_rfsiggain)(struct dvb_frontend *fe, u32 rf_gain);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STB0899)
++#if IS_ENABLED(CONFIG_DVB_STB0899)
+ 
+ extern struct dvb_frontend *stb0899_attach(struct stb0899_config *config,
+ 					   struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/stb6000.h b/drivers/media/dvb-frontends/stb6000.h
+index 38da55a..0cb0078 100644
+--- a/drivers/media/dvb-frontends/stb6000.h
++++ b/drivers/media/dvb-frontends/stb6000.h
+@@ -13,7 +13,7 @@
+ #include <linux/i2c.h>
+ #include <media/dvb_frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STB6000)
++#if IS_ENABLED(CONFIG_DVB_STB6000)
+ /**
+  * stb6000_attach - Attach a stb6000 tuner to the supplied frontend structure.
+  *
+diff --git a/drivers/media/dvb-frontends/stb6100.h b/drivers/media/dvb-frontends/stb6100.h
+index 902b851..6d5533e 100644
+--- a/drivers/media/dvb-frontends/stb6100.h
++++ b/drivers/media/dvb-frontends/stb6100.h
+@@ -81,7 +81,7 @@ struct stb6100_state {
+ 	u32 reference;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STB6100)
++#if IS_ENABLED(CONFIG_DVB_STB6100)
+ 
+ extern struct dvb_frontend *stb6100_attach(struct dvb_frontend *fe,
+ 					   const struct stb6100_config *config,
+diff --git a/drivers/media/dvb-frontends/stv0288.h b/drivers/media/dvb-frontends/stv0288.h
+index 8690aa6..cf28fac 100644
+--- a/drivers/media/dvb-frontends/stv0288.h
++++ b/drivers/media/dvb-frontends/stv0288.h
+@@ -30,7 +30,7 @@ struct stv0288_config {
+ 	int (*set_ts_params)(struct dvb_frontend *fe, int is_punctured);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV0288)
++#if IS_ENABLED(CONFIG_DVB_STV0288)
+ extern struct dvb_frontend *stv0288_attach(const struct stv0288_config *config,
+ 					   struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/stv0297.h b/drivers/media/dvb-frontends/stv0297.h
+index dfa0f84..6b30b69 100644
+--- a/drivers/media/dvb-frontends/stv0297.h
++++ b/drivers/media/dvb-frontends/stv0297.h
+@@ -30,7 +30,7 @@ struct stv0297_config
+ 	u8 stop_during_read:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV0297)
++#if IS_ENABLED(CONFIG_DVB_STV0297)
+ extern struct dvb_frontend* stv0297_attach(const struct stv0297_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/stv0299.h b/drivers/media/dvb-frontends/stv0299.h
+index 4f97c3d..37e68c9 100644
+--- a/drivers/media/dvb-frontends/stv0299.h
++++ b/drivers/media/dvb-frontends/stv0299.h
+@@ -83,7 +83,7 @@ struct stv0299_config
+ 	int (*set_ts_params)(struct dvb_frontend *fe, int is_punctured);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV0299)
++#if IS_ENABLED(CONFIG_DVB_STV0299)
+ extern struct dvb_frontend *stv0299_attach(const struct stv0299_config *config,
+ 					   struct i2c_adapter *i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/stv0367.h b/drivers/media/dvb-frontends/stv0367.h
+index d18ae0f..17d581c 100644
+--- a/drivers/media/dvb-frontends/stv0367.h
++++ b/drivers/media/dvb-frontends/stv0367.h
+@@ -27,7 +27,7 @@ struct stv0367_config {
+ 	int clk_pol;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV0367)
++#if IS_ENABLED(CONFIG_DVB_STV0367)
+ extern struct
+ dvb_frontend *stv0367ter_attach(const struct stv0367_config *config,
+ 					struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/stv0900.h b/drivers/media/dvb-frontends/stv0900.h
+index b7f4091..d3c5a64 100644
+--- a/drivers/media/dvb-frontends/stv0900.h
++++ b/drivers/media/dvb-frontends/stv0900.h
+@@ -43,7 +43,7 @@ struct stv0900_config {
+ 	void (*set_lock_led)(struct dvb_frontend *fe, int offon);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV0900)
++#if IS_ENABLED(CONFIG_DVB_STV0900)
+ extern struct dvb_frontend *stv0900_attach(const struct stv0900_config *config,
+ 					struct i2c_adapter *i2c, int demod);
+ #else
+diff --git a/drivers/media/dvb-frontends/stv090x.h b/drivers/media/dvb-frontends/stv090x.h
+index 89f45d9..3c212ef 100644
+--- a/drivers/media/dvb-frontends/stv090x.h
++++ b/drivers/media/dvb-frontends/stv090x.h
+@@ -98,7 +98,7 @@ struct stv090x_config {
+ 	struct dvb_frontend* (*get_dvb_frontend)(struct i2c_client *i2c);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV090x)
++#if IS_ENABLED(CONFIG_DVB_STV090x)
+ 
+ struct dvb_frontend *stv090x_attach(struct stv090x_config *config,
+ 				    struct i2c_adapter *i2c,
+diff --git a/drivers/media/dvb-frontends/stv0910.h b/drivers/media/dvb-frontends/stv0910.h
+index 0b6f02a..4228f8f 100644
+--- a/drivers/media/dvb-frontends/stv0910.h
++++ b/drivers/media/dvb-frontends/stv0910.h
+@@ -22,7 +22,7 @@ struct stv0910_cfg {
+ 	u8  tsspeed;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV0910)
++#if IS_ENABLED(CONFIG_DVB_STV0910)
+ 
+ struct dvb_frontend *stv0910_attach(struct i2c_adapter *i2c,
+ 				    struct stv0910_cfg *cfg, int nr);
+diff --git a/drivers/media/dvb-frontends/stv6110.h b/drivers/media/dvb-frontends/stv6110.h
+index 1cee9e6..cf5fa9b 100644
+--- a/drivers/media/dvb-frontends/stv6110.h
++++ b/drivers/media/dvb-frontends/stv6110.h
+@@ -31,7 +31,7 @@ struct stv6110_config {
+ 	u8 clk_div;	/* divisor value for the output clock */
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV6110)
++#if IS_ENABLED(CONFIG_DVB_STV6110)
+ extern struct dvb_frontend *stv6110_attach(struct dvb_frontend *fe,
+ 					const struct stv6110_config *config,
+ 					struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/stv6110x.h b/drivers/media/dvb-frontends/stv6110x.h
+index 1feade3..8190351 100644
+--- a/drivers/media/dvb-frontends/stv6110x.h
++++ b/drivers/media/dvb-frontends/stv6110x.h
+@@ -44,7 +44,7 @@ struct stv6110x_devctl {
+ };
+ 
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV6110x)
++#if IS_ENABLED(CONFIG_DVB_STV6110x)
+ 
+ extern const struct stv6110x_devctl *stv6110x_attach(struct dvb_frontend *fe,
+ 					       const struct stv6110x_config *config,
+diff --git a/drivers/media/dvb-frontends/stv6111.h b/drivers/media/dvb-frontends/stv6111.h
+index f172c3e..ab86a4d 100644
+--- a/drivers/media/dvb-frontends/stv6111.h
++++ b/drivers/media/dvb-frontends/stv6111.h
+@@ -8,7 +8,7 @@
+ #ifndef _STV6111_H_
+ #define _STV6111_H_
+ 
+-#if IS_REACHABLE(CONFIG_DVB_STV6111)
++#if IS_ENABLED(CONFIG_DVB_STV6111)
+ 
+ struct dvb_frontend *stv6111_attach(struct dvb_frontend *fe,
+ 				    struct i2c_adapter *i2c, u8 adr);
+diff --git a/drivers/media/dvb-frontends/tda1002x.h b/drivers/media/dvb-frontends/tda1002x.h
+index 60a0952..c76c46c 100644
+--- a/drivers/media/dvb-frontends/tda1002x.h
++++ b/drivers/media/dvb-frontends/tda1002x.h
+@@ -45,7 +45,7 @@ struct tda10023_config {
+ 	u16 deltaf;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA10021)
++#if IS_ENABLED(CONFIG_DVB_TDA10021)
+ extern struct dvb_frontend* tda10021_attach(const struct tda1002x_config* config,
+ 					    struct i2c_adapter* i2c, u8 pwm);
+ #else
+@@ -57,7 +57,7 @@ static inline struct dvb_frontend* tda10021_attach(const struct tda1002x_config*
+ }
+ #endif // CONFIG_DVB_TDA10021
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA10023)
++#if IS_ENABLED(CONFIG_DVB_TDA10023)
+ extern struct dvb_frontend *tda10023_attach(
+ 	const struct tda10023_config *config,
+ 	struct i2c_adapter *i2c, u8 pwm);
+diff --git a/drivers/media/dvb-frontends/tda10048.h b/drivers/media/dvb-frontends/tda10048.h
+index 774fc89..f2dd901 100644
+--- a/drivers/media/dvb-frontends/tda10048.h
++++ b/drivers/media/dvb-frontends/tda10048.h
+@@ -60,7 +60,7 @@ struct tda10048_config {
+ 	u8 pll_n;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA10048)
++#if IS_ENABLED(CONFIG_DVB_TDA10048)
+ extern struct dvb_frontend *tda10048_attach(
+ 	const struct tda10048_config *config,
+ 	struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/tda1004x.h b/drivers/media/dvb-frontends/tda1004x.h
+index e63578c..4df11c5 100644
+--- a/drivers/media/dvb-frontends/tda1004x.h
++++ b/drivers/media/dvb-frontends/tda1004x.h
+@@ -104,7 +104,7 @@ struct tda1004x_state {
+ 	enum tda1004x_demod demod_type;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA1004X)
++#if IS_ENABLED(CONFIG_DVB_TDA1004X)
+ extern struct dvb_frontend* tda10045_attach(const struct tda1004x_config* config,
+ 					    struct i2c_adapter* i2c);
+ 
+diff --git a/drivers/media/dvb-frontends/tda10086.h b/drivers/media/dvb-frontends/tda10086.h
+index 8776fad..1d38231 100644
+--- a/drivers/media/dvb-frontends/tda10086.h
++++ b/drivers/media/dvb-frontends/tda10086.h
+@@ -33,7 +33,7 @@ struct tda10086_config
+ 	enum tda10086_xtal xtal_freq;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA10086)
++#if IS_ENABLED(CONFIG_DVB_TDA10086)
+ extern struct dvb_frontend* tda10086_attach(const struct tda10086_config* config,
+ 					    struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/tda18271c2dd.h b/drivers/media/dvb-frontends/tda18271c2dd.h
+index afeb953..00d3f4e 100644
+--- a/drivers/media/dvb-frontends/tda18271c2dd.h
++++ b/drivers/media/dvb-frontends/tda18271c2dd.h
+@@ -2,7 +2,7 @@
+ #ifndef _TDA18271C2DD_H_
+ #define _TDA18271C2DD_H_
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA18271C2DD)
++#if IS_ENABLED(CONFIG_DVB_TDA18271C2DD)
+ struct dvb_frontend *tda18271c2dd_attach(struct dvb_frontend *fe,
+ 					 struct i2c_adapter *i2c, u8 adr);
+ #else
+diff --git a/drivers/media/dvb-frontends/tda665x.h b/drivers/media/dvb-frontends/tda665x.h
+index b75096c..d2d2742 100644
+--- a/drivers/media/dvb-frontends/tda665x.h
++++ b/drivers/media/dvb-frontends/tda665x.h
+@@ -19,7 +19,7 @@ struct tda665x_config {
+ 	u32	ref_divider;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA665x)
++#if IS_ENABLED(CONFIG_DVB_TDA665x)
+ 
+ extern struct dvb_frontend *tda665x_attach(struct dvb_frontend *fe,
+ 					   const struct tda665x_config *config,
+diff --git a/drivers/media/dvb-frontends/tda8083.h b/drivers/media/dvb-frontends/tda8083.h
+index 3a671ec..a44016a 100644
+--- a/drivers/media/dvb-frontends/tda8083.h
++++ b/drivers/media/dvb-frontends/tda8083.h
+@@ -23,7 +23,7 @@ struct tda8083_config
+ 	u8 demod_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA8083)
++#if IS_ENABLED(CONFIG_DVB_TDA8083)
+ extern struct dvb_frontend* tda8083_attach(const struct tda8083_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/tda8261.h b/drivers/media/dvb-frontends/tda8261.h
+index d45a102..1a6c0f5 100644
+--- a/drivers/media/dvb-frontends/tda8261.h
++++ b/drivers/media/dvb-frontends/tda8261.h
+@@ -22,7 +22,7 @@ struct tda8261_config {
+ 	enum tda8261_step	step_size;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TDA8261)
++#if IS_ENABLED(CONFIG_DVB_TDA8261)
+ 
+ extern struct dvb_frontend *tda8261_attach(struct dvb_frontend *fe,
+ 					   const struct tda8261_config *config,
+diff --git a/drivers/media/dvb-frontends/tda826x.h b/drivers/media/dvb-frontends/tda826x.h
+index e1d33ed..aa8fab1 100644
+--- a/drivers/media/dvb-frontends/tda826x.h
++++ b/drivers/media/dvb-frontends/tda826x.h
+@@ -23,7 +23,7 @@
+  *
+  * return: FE pointer on success, NULL on failure.
+  */
+-#if IS_REACHABLE(CONFIG_DVB_TDA826X)
++#if IS_ENABLED(CONFIG_DVB_TDA826X)
+ extern struct dvb_frontend* tda826x_attach(struct dvb_frontend *fe, int addr,
+ 					   struct i2c_adapter *i2c,
+ 					   int has_loopthrough);
+diff --git a/drivers/media/dvb-frontends/ts2020.h b/drivers/media/dvb-frontends/ts2020.h
+index 84c2dc8..7ae1ae3 100644
+--- a/drivers/media/dvb-frontends/ts2020.h
++++ b/drivers/media/dvb-frontends/ts2020.h
+@@ -55,7 +55,7 @@ struct ts2020_config {
+ };
+ 
+ /* Do not add new ts2020_attach() users! Use I2C bindings instead. */
+-#if IS_REACHABLE(CONFIG_DVB_TS2020)
++#if IS_ENABLED(CONFIG_DVB_TS2020)
+ extern struct dvb_frontend *ts2020_attach(
+ 	struct dvb_frontend *fe,
+ 	const struct ts2020_config *config,
+diff --git a/drivers/media/dvb-frontends/tua6100.h b/drivers/media/dvb-frontends/tua6100.h
+index 2acbf4c..1d62a09 100644
+--- a/drivers/media/dvb-frontends/tua6100.h
++++ b/drivers/media/dvb-frontends/tua6100.h
+@@ -22,7 +22,7 @@
+ #include <linux/i2c.h>
+ #include <media/dvb_frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_DVB_TUA6100)
++#if IS_ENABLED(CONFIG_DVB_TUA6100)
+ extern struct dvb_frontend *tua6100_attach(struct dvb_frontend *fe, int addr, struct i2c_adapter *i2c);
+ #else
+ static inline struct dvb_frontend* tua6100_attach(struct dvb_frontend *fe, int addr, struct i2c_adapter *i2c)
+diff --git a/drivers/media/dvb-frontends/ves1820.h b/drivers/media/dvb-frontends/ves1820.h
+index 73316eb..2f76af9 100644
+--- a/drivers/media/dvb-frontends/ves1820.h
++++ b/drivers/media/dvb-frontends/ves1820.h
+@@ -29,7 +29,7 @@ struct ves1820_config
+ 	u8 selagc:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_VES1820)
++#if IS_ENABLED(CONFIG_DVB_VES1820)
+ extern struct dvb_frontend* ves1820_attach(const struct ves1820_config* config,
+ 					   struct i2c_adapter* i2c, u8 pwm);
+ #else
+diff --git a/drivers/media/dvb-frontends/ves1x93.h b/drivers/media/dvb-frontends/ves1x93.h
+index c95ea75..1213c01 100644
+--- a/drivers/media/dvb-frontends/ves1x93.h
++++ b/drivers/media/dvb-frontends/ves1x93.h
+@@ -27,7 +27,7 @@ struct ves1x93_config
+ 	u8 invert_pwm:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_VES1X93)
++#if IS_ENABLED(CONFIG_DVB_VES1X93)
+ extern struct dvb_frontend* ves1x93_attach(const struct ves1x93_config* config,
+ 					   struct i2c_adapter* i2c);
+ #else
+diff --git a/drivers/media/dvb-frontends/zd1301_demod.h b/drivers/media/dvb-frontends/zd1301_demod.h
+index 01eaacf..c631b12 100644
+--- a/drivers/media/dvb-frontends/zd1301_demod.h
++++ b/drivers/media/dvb-frontends/zd1301_demod.h
+@@ -24,7 +24,7 @@ struct zd1301_demod_platform_data {
+ 	int (*reg_write)(void *, u16, u8);
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ZD1301_DEMOD)
++#if IS_ENABLED(CONFIG_DVB_ZD1301_DEMOD)
+ /**
+  * zd1301_demod_get_dvb_frontend() - Get pointer to DVB frontend
+  * @pdev: Pointer to platform device
+diff --git a/drivers/media/dvb-frontends/zl10036.h b/drivers/media/dvb-frontends/zl10036.h
+index ad83e63..80b1127 100644
+--- a/drivers/media/dvb-frontends/zl10036.h
++++ b/drivers/media/dvb-frontends/zl10036.h
+@@ -17,7 +17,7 @@ struct zl10036_config {
+ 	int rf_loop_enable;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ZL10036)
++#if IS_ENABLED(CONFIG_DVB_ZL10036)
+ /**
+  * zl10036_attach - Attach a zl10036 tuner to the supplied frontend structure.
+  *
+diff --git a/drivers/media/dvb-frontends/zl10039.h b/drivers/media/dvb-frontends/zl10039.h
+index a7fcdfb..b0ae2d6 100644
+--- a/drivers/media/dvb-frontends/zl10039.h
++++ b/drivers/media/dvb-frontends/zl10039.h
+@@ -9,7 +9,7 @@
+ #ifndef ZL10039_H
+ #define ZL10039_H
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ZL10039)
++#if IS_ENABLED(CONFIG_DVB_ZL10039)
+ struct dvb_frontend *zl10039_attach(struct dvb_frontend *fe,
+ 					u8 i2c_addr,
+ 					struct i2c_adapter *i2c);
+diff --git a/drivers/media/dvb-frontends/zl10353.h b/drivers/media/dvb-frontends/zl10353.h
+index 3debd82..3298367 100644
+--- a/drivers/media/dvb-frontends/zl10353.h
++++ b/drivers/media/dvb-frontends/zl10353.h
+@@ -33,7 +33,7 @@ struct zl10353_config
+ 	u8 pll_0;        /* default: 0x15 */
+ };
+ 
+-#if IS_REACHABLE(CONFIG_DVB_ZL10353)
++#if IS_ENABLED(CONFIG_DVB_ZL10353)
+ extern struct dvb_frontend* zl10353_attach(const struct zl10353_config *config,
+ 					   struct i2c_adapter *i2c);
+ #else
