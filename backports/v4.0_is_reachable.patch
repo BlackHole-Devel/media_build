@@ -1268,3 +1268,328 @@ index 3debd82..3298367 100644
  extern struct dvb_frontend* zl10353_attach(const struct zl10353_config *config,
  					   struct i2c_adapter *i2c);
  #else
+diff --git a/drivers/media/tuners/fc0011.h b/drivers/media/tuners/fc0011.h
+index ebae37c..d51c973 100644
+--- a/drivers/media/tuners/fc0011.h
++++ b/drivers/media/tuners/fc0011.h
+@@ -23,7 +23,7 @@ enum fc0011_fe_callback_commands {
+ 	FC0011_FE_CALLBACK_RESET,
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_FC0011)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_FC0011)
+ struct dvb_frontend *fc0011_attach(struct dvb_frontend *fe,
+ 				   struct i2c_adapter *i2c,
+ 				   const struct fc0011_config *config);
+diff --git a/drivers/media/tuners/fc0012.h b/drivers/media/tuners/fc0012.h
+index 9991056..ecd9869 100644
+--- a/drivers/media/tuners/fc0012.h
++++ b/drivers/media/tuners/fc0012.h
+@@ -35,7 +35,7 @@ struct fc0012_config {
+ 	bool clock_out;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_FC0012)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_FC0012)
+ extern struct dvb_frontend *fc0012_attach(struct dvb_frontend *fe,
+ 					struct i2c_adapter *i2c,
+ 					const struct fc0012_config *cfg);
+diff --git a/drivers/media/tuners/fc0013.h b/drivers/media/tuners/fc0013.h
+index 74ce590..c67a039 100644
+--- a/drivers/media/tuners/fc0013.h
++++ b/drivers/media/tuners/fc0013.h
+@@ -11,7 +11,7 @@
+ #include <media/dvb_frontend.h>
+ #include "fc001x-common.h"
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_FC0013)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_FC0013)
+ extern struct dvb_frontend *fc0013_attach(struct dvb_frontend *fe,
+ 					struct i2c_adapter *i2c,
+ 					u8 i2c_address, int dual_master,
+diff --git a/drivers/media/tuners/max2165.h b/drivers/media/tuners/max2165.h
+index 5899087..0421f37 100644
+--- a/drivers/media/tuners/max2165.h
++++ b/drivers/media/tuners/max2165.h
+@@ -16,7 +16,7 @@ struct max2165_config {
+ 	u8 osc_clk; /* in MHz, selectable values: 4,16,18,20,22,24,26,28 */
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MAX2165)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MAX2165)
+ extern struct dvb_frontend *max2165_attach(struct dvb_frontend *fe,
+ 	struct i2c_adapter *i2c,
+ 	struct max2165_config *cfg);
+diff --git a/drivers/media/tuners/mc44s803.h b/drivers/media/tuners/mc44s803.h
+index 00c4da8..5ea0db9 100644
+--- a/drivers/media/tuners/mc44s803.h
++++ b/drivers/media/tuners/mc44s803.h
+@@ -16,7 +16,7 @@ struct mc44s803_config {
+ 	u8 dig_out;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MC44S803)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MC44S803)
+ extern struct dvb_frontend *mc44s803_attach(struct dvb_frontend *fe,
+ 	 struct i2c_adapter *i2c, struct mc44s803_config *cfg);
+ #else
+diff --git a/drivers/media/tuners/mt2060.h b/drivers/media/tuners/mt2060.h
+index c4647a3..c6a69aa 100644
+--- a/drivers/media/tuners/mt2060.h
++++ b/drivers/media/tuners/mt2060.h
+@@ -39,7 +39,7 @@ struct mt2060_config {
+ 	u8 clock_out; /* 0 = off, 1 = CLK/4, 2 = CLK/2, 3 = CLK/1 */
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MT2060)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MT2060)
+ extern struct dvb_frontend * mt2060_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, struct mt2060_config *cfg, u16 if1);
+ #else
+ static inline struct dvb_frontend * mt2060_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, struct mt2060_config *cfg, u16 if1)
+diff --git a/drivers/media/tuners/mt2063.h b/drivers/media/tuners/mt2063.h
+index 30d03cd..81595e1 100644
+--- a/drivers/media/tuners/mt2063.h
++++ b/drivers/media/tuners/mt2063.h
+@@ -9,7 +9,7 @@ struct mt2063_config {
+ 	u32 refclock;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MT2063)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MT2063)
+ struct dvb_frontend *mt2063_attach(struct dvb_frontend *fe,
+ 				   struct mt2063_config *config,
+ 				   struct i2c_adapter *i2c);
+diff --git a/drivers/media/tuners/mt20xx.h b/drivers/media/tuners/mt20xx.h
+index 6a8b9b8..d5e23bd 100644
+--- a/drivers/media/tuners/mt20xx.h
++++ b/drivers/media/tuners/mt20xx.h
+@@ -8,7 +8,7 @@
+ #include <linux/i2c.h>
+ #include <media/dvb_frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MT20XX)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MT20XX)
+ extern struct dvb_frontend *microtune_attach(struct dvb_frontend *fe,
+ 					     struct i2c_adapter* i2c_adap,
+ 					     u8 i2c_addr);
+diff --git a/drivers/media/tuners/mt2131.h b/drivers/media/tuners/mt2131.h
+index a257e09..e379c9b 100644
+--- a/drivers/media/tuners/mt2131.h
++++ b/drivers/media/tuners/mt2131.h
+@@ -16,7 +16,7 @@ struct mt2131_config {
+ 	u8 clock_out; /* 0 = off, 1 = CLK/4, 2 = CLK/2, 3 = CLK/1 */
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MT2131)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MT2131)
+ extern struct dvb_frontend* mt2131_attach(struct dvb_frontend *fe,
+ 					  struct i2c_adapter *i2c,
+ 					  struct mt2131_config *cfg,
+diff --git a/drivers/media/tuners/mt2266.h b/drivers/media/tuners/mt2266.h
+index 8dc4d56..22e48fd 100644
+--- a/drivers/media/tuners/mt2266.h
++++ b/drivers/media/tuners/mt2266.h
+@@ -15,7 +15,7 @@ struct mt2266_config {
+ 	u8 i2c_address;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MT2266)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MT2266)
+ extern struct dvb_frontend * mt2266_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, struct mt2266_config *cfg);
+ #else
+ static inline struct dvb_frontend * mt2266_attach(struct dvb_frontend *fe, struct i2c_adapter *i2c, struct mt2266_config *cfg)
+diff --git a/drivers/media/tuners/mxl5005s.h b/drivers/media/tuners/mxl5005s.h
+index cb7395f..bda4ff1 100644
+--- a/drivers/media/tuners/mxl5005s.h
++++ b/drivers/media/tuners/mxl5005s.h
+@@ -104,7 +104,7 @@ struct mxl5005s_config {
+ 	u8 AgcMasterByte;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MXL5005S)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MXL5005S)
+ extern struct dvb_frontend *mxl5005s_attach(struct dvb_frontend *fe,
+ 					    struct i2c_adapter *i2c,
+ 					    struct mxl5005s_config *config);
+diff --git a/drivers/media/tuners/mxl5007t.h b/drivers/media/tuners/mxl5007t.h
+index d28bac4..435385b 100644
+--- a/drivers/media/tuners/mxl5007t.h
++++ b/drivers/media/tuners/mxl5007t.h
+@@ -64,7 +64,7 @@ struct mxl5007t_config {
+ 	unsigned int clk_out_enable:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_MXL5007T)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_MXL5007T)
+ extern struct dvb_frontend *mxl5007t_attach(struct dvb_frontend *fe,
+ 					    struct i2c_adapter *i2c, u8 addr,
+ 					    struct mxl5007t_config *cfg);
+diff --git a/drivers/media/tuners/qt1010.h b/drivers/media/tuners/qt1010.h
+index 8db8743..5d06651 100644
+--- a/drivers/media/tuners/qt1010.h
++++ b/drivers/media/tuners/qt1010.h
+@@ -23,7 +23,7 @@ struct qt1010_config {
+  * @cfg:  tuner hw based configuration
+  * @return fe  pointer on success, NULL on failure
+  */
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_QT1010)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_QT1010)
+ extern struct dvb_frontend *qt1010_attach(struct dvb_frontend *fe,
+ 					  struct i2c_adapter *i2c,
+ 					  struct qt1010_config *cfg);
+diff --git a/drivers/media/tuners/r820t.h b/drivers/media/tuners/r820t.h
+index 6709a0d..b1019f2 100644
+--- a/drivers/media/tuners/r820t.h
++++ b/drivers/media/tuners/r820t.h
+@@ -28,7 +28,7 @@ struct r820t_config {
+ 	bool use_predetect;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_R820T)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_R820T)
+ struct dvb_frontend *r820t_attach(struct dvb_frontend *fe,
+ 				  struct i2c_adapter *i2c,
+ 				  const struct r820t_config *cfg);
+diff --git a/drivers/media/tuners/tda18218.h b/drivers/media/tuners/tda18218.h
+index 7ab692b..62377b0 100644
+--- a/drivers/media/tuners/tda18218.h
++++ b/drivers/media/tuners/tda18218.h
+@@ -16,7 +16,7 @@ struct tda18218_config {
+ 	u8 loop_through:1;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_TDA18218)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_TDA18218)
+ extern struct dvb_frontend *tda18218_attach(struct dvb_frontend *fe,
+ 	struct i2c_adapter *i2c, struct tda18218_config *cfg);
+ #else
+diff --git a/drivers/media/tuners/tda18271.h b/drivers/media/tuners/tda18271.h
+index 38006b3..eb9fc93 100644
+--- a/drivers/media/tuners/tda18271.h
++++ b/drivers/media/tuners/tda18271.h
+@@ -109,7 +109,7 @@ enum tda18271_mode {
+ 	TDA18271_DIGITAL,
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_TDA18271)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_TDA18271)
+ extern struct dvb_frontend *tda18271_attach(struct dvb_frontend *fe, u8 addr,
+ 					    struct i2c_adapter *i2c,
+ 					    struct tda18271_config *cfg);
+diff --git a/drivers/media/tuners/tda827x.h b/drivers/media/tuners/tda827x.h
+index d3c2f00..317a7f1 100644
+--- a/drivers/media/tuners/tda827x.h
++++ b/drivers/media/tuners/tda827x.h
+@@ -38,7 +38,7 @@ struct tda827x_config
+  * @cfg: optional callback function pointers.
+  * @return FE pointer on success, NULL on failure.
+  */
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_TDA827X)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_TDA827X)
+ extern struct dvb_frontend* tda827x_attach(struct dvb_frontend *fe, int addr,
+ 					   struct i2c_adapter *i2c,
+ 					   struct tda827x_config *cfg);
+diff --git a/drivers/media/tuners/tda8290.h b/drivers/media/tuners/tda8290.h
+index 0a50f66..15c8754 100644
+--- a/drivers/media/tuners/tda8290.h
++++ b/drivers/media/tuners/tda8290.h
+@@ -26,7 +26,7 @@ struct tda829x_config {
+ 	struct tda18271_std_map *tda18271_std_map;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_TDA8290)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_TDA8290)
+ extern int tda829x_probe(struct i2c_adapter *i2c_adap, u8 i2c_addr);
+ 
+ extern struct dvb_frontend *tda829x_attach(struct dvb_frontend *fe,
+diff --git a/drivers/media/tuners/tda9887.h b/drivers/media/tuners/tda9887.h
+index 576bb09..1ee7180 100644
+--- a/drivers/media/tuners/tda9887.h
++++ b/drivers/media/tuners/tda9887.h
+@@ -9,7 +9,7 @@
+ #include <media/dvb_frontend.h>
+ 
+ /* ------------------------------------------------------------------------ */
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_TDA9887)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_TDA9887)
+ extern struct dvb_frontend *tda9887_attach(struct dvb_frontend *fe,
+ 					   struct i2c_adapter *i2c_adap,
+ 					   u8 i2c_addr);
+diff --git a/drivers/media/tuners/tea5761.h b/drivers/media/tuners/tea5761.h
+index 7f6a859..a77201c 100644
+--- a/drivers/media/tuners/tea5761.h
++++ b/drivers/media/tuners/tea5761.h
+@@ -8,7 +8,7 @@
+ #include <linux/i2c.h>
+ #include <media/dvb_frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_TEA5761)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_TEA5761)
+ extern int tea5761_autodetection(struct i2c_adapter* i2c_adap, u8 i2c_addr);
+ 
+ extern struct dvb_frontend *tea5761_attach(struct dvb_frontend *fe,
+diff --git a/drivers/media/tuners/tea5767.h b/drivers/media/tuners/tea5767.h
+index f89607d..7180acd 100644
+--- a/drivers/media/tuners/tea5767.h
++++ b/drivers/media/tuners/tea5767.h
+@@ -27,7 +27,7 @@ struct tea5767_ctrl {
+ 	enum tea5767_xtal	xtal_freq;
+ };
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_TEA5767)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_TEA5767)
+ extern int tea5767_autodetection(struct i2c_adapter* i2c_adap, u8 i2c_addr);
+ 
+ extern struct dvb_frontend *tea5767_attach(struct dvb_frontend *fe,
+diff --git a/drivers/media/tuners/tuner-simple.h b/drivers/media/tuners/tuner-simple.h
+index 78c51c6..39ae80a 100644
+--- a/drivers/media/tuners/tuner-simple.h
++++ b/drivers/media/tuners/tuner-simple.h
+@@ -8,7 +8,7 @@
+ #include <linux/i2c.h>
+ #include <media/dvb_frontend.h>
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_SIMPLE)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_SIMPLE)
+ extern struct dvb_frontend *simple_tuner_attach(struct dvb_frontend *fe,
+ 						struct i2c_adapter *i2c_adap,
+ 						u8 i2c_addr,
+diff --git a/drivers/media/tuners/xc2028.h b/drivers/media/tuners/xc2028.h
+index 072faae..0df496c 100644
+--- a/drivers/media/tuners/xc2028.h
++++ b/drivers/media/tuners/xc2028.h
+@@ -57,7 +57,7 @@ struct xc2028_config {
+ #define XC2028_RESET_CLK	1
+ #define XC2028_I2C_FLUSH	2
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_XC2028)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_XC2028)
+ extern struct dvb_frontend *xc2028_attach(struct dvb_frontend *fe,
+ 					  struct xc2028_config *cfg);
+ #else
+diff --git a/drivers/media/tuners/xc4000.h b/drivers/media/tuners/xc4000.h
+index bdfdcc7..308efb5 100644
+--- a/drivers/media/tuners/xc4000.h
++++ b/drivers/media/tuners/xc4000.h
+@@ -36,7 +36,7 @@ struct xc4000_config {
+  * it's passed back to a bridge during tuner_callback().
+  */
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_XC4000)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_XC4000)
+ extern struct dvb_frontend *xc4000_attach(struct dvb_frontend *fe,
+ 					  struct i2c_adapter *i2c,
+ 					  struct xc4000_config *cfg);
+diff --git a/drivers/media/tuners/xc5000.h b/drivers/media/tuners/xc5000.h
+index 1e4f714..a4730ba 100644
+--- a/drivers/media/tuners/xc5000.h
++++ b/drivers/media/tuners/xc5000.h
+@@ -43,7 +43,7 @@ struct xc5000_config {
+  * it's passed back to a bridge during tuner_callback().
+  */
+ 
+-#if IS_REACHABLE(CONFIG_MEDIA_TUNER_XC5000)
++#if IS_ENABLED(CONFIG_MEDIA_TUNER_XC5000)
+ extern struct dvb_frontend *xc5000_attach(struct dvb_frontend *fe,
+ 					  struct i2c_adapter *i2c,
+ 					  const struct xc5000_config *cfg);
