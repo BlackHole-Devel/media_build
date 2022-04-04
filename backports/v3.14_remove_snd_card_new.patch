@@ -1,0 +1,45 @@
+diff --git a/drivers/media/usb/cx231xx/cx231xx-audio.c b/drivers/media/usb/cx231xx/cx231xx-audio.c
+index cfe926e..31e101a 100644
+--- a/drivers/media/usb/cx231xx/cx231xx-audio.c
++++ b/drivers/media/usb/cx231xx/cx231xx-audio.c
+@@ -654,7 +654,7 @@ static int cx231xx_audio_init(struct cx231xx *dev)
+ 	dev_dbg(dev->dev,
+ 		"probing for cx231xx non standard usbaudio\n");
+ 
+-	err = snd_card_new(dev->dev, index[devnr], "Cx231xx Audio",
++	err = snd_card_create(SNDRV_DEFAULT_IDX1, SNDRV_DEFAULT_STR1,
+ 			   THIS_MODULE, 0, &card);
+ 	if (err < 0)
+ 		return err;
+@@ -669,6 +669,7 @@ static int cx231xx_audio_init(struct cx231xx *dev)
+ 	pcm->info_flags = 0;
+ 	pcm->private_data = dev;
+ 	strscpy(pcm->name, "Conexant cx231xx Capture", sizeof(pcm->name));
++	snd_card_set_dev(card, &dev->udev->dev);
+ 	strscpy(card->driver, "Cx231xx-Audio", sizeof(card->driver));
+ 	strscpy(card->shortname, "Cx231xx Audio", sizeof(card->shortname));
+ 	strscpy(card->longname, "Conexant cx231xx Audio", sizeof(card->longname));
+diff --git a/drivers/media/usb/em28xx/em28xx-audio.c b/drivers/media/usb/em28xx/em28xx-audio.c
+index 08e7316..ed1bc73 100644
+--- a/drivers/media/usb/em28xx/em28xx-audio.c
++++ b/drivers/media/usb/em28xx/em28xx-audio.c
+@@ -922,8 +922,8 @@ static int em28xx_audio_init(struct em28xx *dev)
+ 	dev_info(&dev->intf->dev,
+ 		 "em28xx-audio.c: Copyright (C) 2007-2016 Mauro Carvalho Chehab\n");
+ 
+-	err = snd_card_new(&dev->intf->dev, index[devnr], "Em28xx Audio",
+-			   THIS_MODULE, 0, &card);
++	err = snd_card_create(index[devnr], "Em28xx Audio", THIS_MODULE, 0,
++	          &card);
+ 	if (err < 0)
+ 		return err;
+ 
+@@ -939,7 +939,7 @@ static int em28xx_audio_init(struct em28xx *dev)
+ 	pcm->info_flags = 0;
+ 	pcm->private_data = dev;
+ 	strscpy(pcm->name, "Empia 28xx Capture", sizeof(pcm->name));
+-
++	snd_card_set_dev(card, &dev->udev->dev);
+ 	strscpy(card->driver, "Em28xx-Audio", sizeof(card->driver));
+ 	strscpy(card->shortname, "Em28xx Audio", sizeof(card->shortname));
+ 	strscpy(card->longname, "Empia Em28xx Audio", sizeof(card->longname));
