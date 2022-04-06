@@ -166,7 +166,6 @@ add v4.3_bt87x_const_fix.patch
 
 [4.2.255]
 add v4.2_atomic64.patch
-add v4.2_frame_vector.patch
 
 [4.1.255]
 add v4.1_pat_enabled.patch
@@ -197,6 +196,7 @@ add v3.16_wait_on_bit.patch
 add v3.16_void_gpiochip_remove.patch
 add v3.16_drop_pointing_stick.patch
 add v3.16_dma_buf_export.patch
+add v3.16_media_frame_vector.patch
 
 [3.14.255]
 add v3.14_remove_snd_card_new.patch
