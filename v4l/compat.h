@@ -3035,7 +3035,7 @@ enum gpiod_flags {
 };
 #endif
 
-#ifdef NEEDS_DEVM_KASPRINTF
+#ifdef NEED_DEVM_KASPRINTF
 static char *devm_kvasprintf(struct device *dev, gfp_t gfp, const char *fmt,
 		      va_list ap)
 {
