@@ -1,0 +1,22 @@
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index ba10fb4..f451ebd 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -1869,7 +1869,7 @@ static int tvp5150_init(struct i2c_client *c)
+ 	struct gpio_desc *pdn_gpio;
+ 	struct gpio_desc *reset_gpio;
+ 
+-	pdn_gpio = devm_gpiod_get_optional(&c->dev, "pdn", GPIOD_OUT_HIGH);
++	pdn_gpio = devm_gpiod_get_index(&c->dev, "pdn", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(pdn_gpio))
+ 		return PTR_ERR(pdn_gpio);
+ 
+@@ -1879,7 +1879,7 @@ static int tvp5150_init(struct i2c_client *c)
+ 		msleep(20);
+ 	}
+ 
+-	reset_gpio = devm_gpiod_get_optional(&c->dev, "reset", GPIOD_OUT_HIGH);
++	reset_gpio = devm_gpiod_get_index(&c->dev, "reset", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(reset_gpio))
+ 		return PTR_ERR(reset_gpio);
+ 
