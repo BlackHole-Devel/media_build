@@ -756,6 +756,8 @@ sub check_other_dependencies()
 	check_files_for_func("ALIGN_DOWN", "NEED_ALIGN_DOWN", "include/linux/align.h", "include/linux/kernel.h");
 	check_files_for_func("bitmap_zalloc", "NEED_BITMAP_ZALLOC", "include/linux/bitmap.h");
 	check_files_for_func("firmware_request_nowarn", "NEED_FIRMWARE_REQUEST_NOWARN", "include/linux/firmware.h");
+	check_files_for_func("gpiod_flags", "NEED_GPIOD_FLAGS", "include/linux/gpio/consumer.h");
+	check_files_for_func("devm_kasprintf", "NEEDS_DEVM_KASPRINTF", "include/linux/device.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");
