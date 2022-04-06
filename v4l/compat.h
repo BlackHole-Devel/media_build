@@ -3017,4 +3017,20 @@ static inline int dma_mmap_noncontiguous(struct device *dev,
 #define firmware_request_nowarn request_firmware
 #endif
 
+#define GPIOD_FLAGS_BIT_DIR_SET		BIT(0)
+#define GPIOD_FLAGS_BIT_DIR_OUT		BIT(1)
+#define GPIOD_FLAGS_BIT_DIR_VAL		BIT(2)
+
+/**
+ * Optional flags that can be passed to one of gpiod_* to configure direction
+ * and output value. These values cannot be OR'd.
+ */
+enum gpiod_flags {
+    GPIOD_ASIS	= 0,
+    GPIOD_IN	= GPIOD_FLAGS_BIT_DIR_SET,
+    GPIOD_OUT_LOW	= GPIOD_FLAGS_BIT_DIR_SET | GPIOD_FLAGS_BIT_DIR_OUT,
+    GPIOD_OUT_HIGH	= GPIOD_FLAGS_BIT_DIR_SET | GPIOD_FLAGS_BIT_DIR_OUT |
+	      GPIOD_FLAGS_BIT_DIR_VAL,
+};
+
 #endif /*  _COMPAT_H */
