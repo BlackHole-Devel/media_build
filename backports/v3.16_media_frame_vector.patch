@@ -1,0 +1,245 @@
+diff --git a/drivers/media/common/videobuf2/frame_vector.c b/drivers/media/common/videobuf2/frame_vector.c
+index 4aa700d..8e004bb 100644
+--- a/drivers/media/common/videobuf2/frame_vector.c
++++ b/drivers/media/common/videobuf2/frame_vector.c
+@@ -33,7 +33,7 @@
+  * This function takes care of grabbing mmap_lock as necessary.
+  */
+ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+-		     struct frame_vector *vec)
++		     struct media_frame_vector *vec)
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+@@ -64,7 +64,7 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 	vec->is_pfns = true;
+ 	ret = 0;
+ 	do {
+-		unsigned long *nums = frame_vector_pfns(vec);
++		unsigned long *nums = media_frame_vector_pfns(vec);
+ 
+ 		vma = vma_lookup(mm, start);
+ 		if (!vma)
+@@ -115,16 +115,16 @@ EXPORT_SYMBOL(get_vaddr_frames);
+  * invalidate the frame vector so that it is prepared for the next call into
+  * get_vaddr_frames().
+  */
+-void put_vaddr_frames(struct frame_vector *vec)
++void put_vaddr_frames(struct media_frame_vector *vec)
+ {
+ 	struct page **pages;
+ 	int i;
+ 
+ 	if (!vec->got_ref)
+ 		goto out;
+-	pages = frame_vector_pages(vec);
++	pages = media_frame_vector_pages(vec);
+ 	/*
+-	 * frame_vector_pages() might needed to do a conversion when
++	 * media_frame_vector_pages() might needed to do a conversion when
+ 	 * get_vaddr_frames() got pages but vec was later converted to pfns.
+ 	 * But it shouldn't really fail to convert pfns back...
+ 	 */
+@@ -140,14 +140,14 @@ out:
+ EXPORT_SYMBOL(put_vaddr_frames);
+ 
+ /**
+- * frame_vector_to_pages - convert frame vector to contain page pointers
++ * media_frame_vector_to_pages - convert frame vector to contain page pointers
+  * @vec:	frame vector to convert
+  *
+  * Convert @vec to contain array of page pointers.  If the conversion is
+  * successful, return 0. Otherwise return an error. Note that we do not grab
+  * page references for the page structures.
+  */
+-int frame_vector_to_pages(struct frame_vector *vec)
++int media_frame_vector_to_pages(struct media_frame_vector *vec)
+ {
+ 	int i;
+ 	unsigned long *nums;
+@@ -155,7 +155,7 @@ int frame_vector_to_pages(struct frame_vector *vec)
+ 
+ 	if (!vec->is_pfns)
+ 		return 0;
+-	nums = frame_vector_pfns(vec);
++	nums = media_frame_vector_pfns(vec);
+ 	for (i = 0; i < vec->nr_frames; i++)
+ 		if (!pfn_valid(nums[i]))
+ 			return -EINVAL;
+@@ -165,15 +165,15 @@ int frame_vector_to_pages(struct frame_vector *vec)
+ 	vec->is_pfns = false;
+ 	return 0;
+ }
+-EXPORT_SYMBOL(frame_vector_to_pages);
++EXPORT_SYMBOL(media_frame_vector_to_pages);
+ 
+ /**
+- * frame_vector_to_pfns - convert frame vector to contain pfns
++ * media_frame_vector_to_pfns - convert frame vector to contain pfns
+  * @vec:	frame vector to convert
+  *
+  * Convert @vec to contain array of pfns.
+  */
+-void frame_vector_to_pfns(struct frame_vector *vec)
++void media_frame_vector_to_pfns(struct media_frame_vector *vec)
+ {
+ 	int i;
+ 	unsigned long *nums;
+@@ -187,19 +187,19 @@ void frame_vector_to_pfns(struct frame_vector *vec)
+ 		nums[i] = page_to_pfn(pages[i]);
+ 	vec->is_pfns = true;
+ }
+-EXPORT_SYMBOL(frame_vector_to_pfns);
++EXPORT_SYMBOL(media_frame_vector_to_pfns);
+ 
+ /**
+- * frame_vector_create() - allocate & initialize structure for pinned pfns
++ * media_frame_vector_create() - allocate & initialize structure for pinned pfns
+  * @nr_frames:	number of pfns slots we should reserve
+  *
+  * Allocate and initialize struct pinned_pfns to be able to hold @nr_pfns
+  * pfns.
+  */
+-struct frame_vector *frame_vector_create(unsigned int nr_frames)
++struct media_frame_vector *media_frame_vector_create(unsigned int nr_frames)
+ {
+-	struct frame_vector *vec;
+-	int size = sizeof(struct frame_vector) + sizeof(void *) * nr_frames;
++	struct media_frame_vector *vec;
++	int size = sizeof(struct media_frame_vector) + sizeof(void *) * nr_frames;
+ 
+ 	if (WARN_ON_ONCE(nr_frames == 0))
+ 		return NULL;
+@@ -220,18 +220,18 @@ struct frame_vector *frame_vector_create(unsigned int nr_frames)
+ 	vec->nr_frames = 0;
+ 	return vec;
+ }
+-EXPORT_SYMBOL(frame_vector_create);
++EXPORT_SYMBOL(media_frame_vector_create);
+ 
+ /**
+- * frame_vector_destroy() - free memory allocated to carry frame vector
++ * media_frame_vector_destroy() - free memory allocated to carry frame vector
+  * @vec:	Frame vector to free
+  *
+- * Free structure allocated by frame_vector_create() to carry frames.
++ * Free structure allocated by media_frame_vector_create() to carry frames.
+  */
+-void frame_vector_destroy(struct frame_vector *vec)
++void media_frame_vector_destroy(struct media_frame_vector *vec)
+ {
+ 	/* Make sure put_vaddr_frames() got called properly... */
+ 	VM_BUG_ON(vec->nr_frames > 0);
+ 	kvfree(vec);
+ }
+-EXPORT_SYMBOL(frame_vector_destroy);
++EXPORT_SYMBOL(media_frame_vector_destroy);
+diff --git a/drivers/media/common/videobuf2/videobuf2-memops.c b/drivers/media/common/videobuf2/videobuf2-memops.c
+index 5ccb3a3..3c70f46 100644
+--- a/drivers/media/common/videobuf2/videobuf2-memops.c
++++ b/drivers/media/common/videobuf2/videobuf2-memops.c
+@@ -33,18 +33,18 @@
+  * returns pointer to the vector on success and error pointer in case of
+  * failure. Returned vector needs to be freed via vb2_destroy_pfnvec().
+  */
+-struct frame_vector *vb2_create_framevec(unsigned long start,
++struct media_frame_vector *vb2_create_framevec(unsigned long start,
+ 					 unsigned long length)
+ {
+ 	int ret;
+ 	unsigned long first, last;
+ 	unsigned long nr;
+-	struct frame_vector *vec;
++	struct media_frame_vector *vec;
+ 
+ 	first = start >> PAGE_SHIFT;
+ 	last = (start + length - 1) >> PAGE_SHIFT;
+ 	nr = last - first + 1;
+-	vec = frame_vector_create(nr);
++	vec = media_frame_vector_create(nr);
+ 	if (!vec)
+ 		return ERR_PTR(-ENOMEM);
+ 	ret = get_vaddr_frames(start & PAGE_MASK, nr, vec);
+@@ -59,7 +59,7 @@ struct frame_vector *vb2_create_framevec(unsigned long start,
+ out_release:
+ 	put_vaddr_frames(vec);
+ out_destroy:
+-	frame_vector_destroy(vec);
++	media_frame_vector_destroy(vec);
+ 	return ERR_PTR(ret);
+ }
+ EXPORT_SYMBOL(vb2_create_framevec);
+@@ -71,10 +71,10 @@ EXPORT_SYMBOL(vb2_create_framevec);
+  * This releases references to all pages in the vector @vec (if corresponding
+  * pfns are backed by pages) and frees the passed vector.
+  */
+-void vb2_destroy_framevec(struct frame_vector *vec)
++void vb2_destroy_framevec(struct media_frame_vector *vec)
+ {
+ 	put_vaddr_frames(vec);
+-	frame_vector_destroy(vec);
++	media_frame_vector_destroy(vec);
+ }
+ EXPORT_SYMBOL(vb2_destroy_framevec);
+ 
+diff --git a/include/media/frame_vector.h b/include/media/frame_vector.h
+index bfed171..00923ee 100644
+--- a/include/media/frame_vector.h
++++ b/include/media/frame_vector.h
+@@ -2,8 +2,8 @@
+ #ifndef _MEDIA_FRAME_VECTOR_H
+ #define _MEDIA_FRAME_VECTOR_H
+ 
+-/* Container for pinned pfns / pages in frame_vector.c */
+-struct frame_vector {
++/* Container for pinned pfns / pages in media_frame_vector.c */
++struct media_frame_vector {
+ 	unsigned int nr_allocated;	/* Number of frames we have space for */
+ 	unsigned int nr_frames;	/* Number of frames stored in ptrs array */
+ 	bool got_ref;		/* Did we pin pages by getting page ref? */
+@@ -13,23 +13,23 @@ struct frame_vector {
+ 				 * for access */
+ };
+ 
+-struct frame_vector *frame_vector_create(unsigned int nr_frames);
+-void frame_vector_destroy(struct frame_vector *vec);
++struct media_frame_vector *media_frame_vector_create(unsigned int nr_frames);
++void media_frame_vector_destroy(struct media_frame_vector *vec);
+ int get_vaddr_frames(unsigned long start, unsigned int nr_pfns,
+-		     struct frame_vector *vec);
+-void put_vaddr_frames(struct frame_vector *vec);
+-int frame_vector_to_pages(struct frame_vector *vec);
+-void frame_vector_to_pfns(struct frame_vector *vec);
++		     struct media_frame_vector *vec);
++void put_vaddr_frames(struct media_frame_vector *vec);
++int media_frame_vector_to_pages(struct media_frame_vector *vec);
++void media_frame_vector_to_pfns(struct media_frame_vector *vec);
+ 
+-static inline unsigned int frame_vector_count(struct frame_vector *vec)
++static inline unsigned int media_frame_vector_count(struct media_frame_vector *vec)
+ {
+ 	return vec->nr_frames;
+ }
+ 
+-static inline struct page **frame_vector_pages(struct frame_vector *vec)
++static inline struct page **media_frame_vector_pages(struct media_frame_vector *vec)
+ {
+ 	if (vec->is_pfns) {
+-		int err = frame_vector_to_pages(vec);
++		int err = media_frame_vector_to_pages(vec);
+ 
+ 		if (err)
+ 			return ERR_PTR(err);
+@@ -37,10 +37,10 @@ static inline struct page **frame_vector_pages(struct frame_vector *vec)
+ 	return (struct page **)(vec->ptrs);
+ }
+ 
+-static inline unsigned long *frame_vector_pfns(struct frame_vector *vec)
++static inline unsigned long *media_frame_vector_pfns(struct media_frame_vector *vec)
+ {
+ 	if (!vec->is_pfns)
+-		frame_vector_to_pfns(vec);
++		media_frame_vector_to_pfns(vec);
+ 	return (unsigned long *)(vec->ptrs);
+ }
+ 
