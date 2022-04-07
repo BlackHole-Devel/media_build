@@ -758,6 +758,7 @@ sub check_other_dependencies()
 	check_files_for_func("firmware_request_nowarn", "NEED_FIRMWARE_REQUEST_NOWARN", "include/linux/firmware.h");
 	check_files_for_func("gpiod_flags", "NEED_GPIOD_FLAGS", "include/linux/gpio/consumer.h");
 	check_files_for_func("devm_kasprintf", "NEED_DEVM_KASPRINTF", "include/linux/device.h");
+	check_files_for_func("regman_write_bits", "NEED_REGMAP_WRITE_BITS", "include/linux/regman.h");
 
 	# For tests for uapi-dependent logic
 	check_files_for_func_uapi("usb_endpoint_maxp", "NEED_USB_ENDPOINT_MAXP", "usb/ch9.h");
