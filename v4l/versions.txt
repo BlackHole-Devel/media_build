@@ -158,8 +158,6 @@ VIDEO_OV13858
 VIDEO_SOLO6X10
 
 [4.3.0]
-# needs regmap_write_bits
-MEDIA_TUNER_TDA18250
 # needs struct reg_sequence
 VIDEO_OV7740
 
