@@ -397,6 +397,21 @@ index 9d571c9..e080cfd 100644
  		list_del(list); /* remove list entry */
  		kfree(fe);	/* free frontend allocation */
  	}
+diff --git a/drivers/media/dvb-core/Makefile b/drivers/media/dvb-core/Makefile
+index 62b028d..61e5c20 100644
+--- a/drivers/media/dvb-core/Makefile
++++ b/drivers/media/dvb-core/Makefile
+@@ -6,8 +6,8 @@
+ dvb-net-$(CONFIG_DVB_NET) := dvb_net.o
+ dvb-vb2-$(CONFIG_DVB_MMAP) := dvb_vb2.o
+ 
+-dvb-core-objs := dvbdev.o dmxdev.o dvb_demux.o			\
++mediatree-dvb-core-objs := dvbdev.o dmxdev.o dvb_demux.o			\
+ 		 dvb_ca_en50221.o dvb_frontend.o		\
+ 		 $(dvb-net-y) dvb_ringbuffer.o $(dvb-vb2-y) dvb_math.o
+ 
+-obj-$(CONFIG_DVB_CORE) += dvb-core.o
++obj-$(CONFIG_DVB_CORE) += mediatree-dvb-core.o
 diff --git a/drivers/media/dvb-core/dmxdev.c b/drivers/media/dvb-core/dmxdev.c
 index 6198d6f..4d3f7a7 100644
 --- a/drivers/media/dvb-core/dmxdev.c
@@ -1566,7 +1581,7 @@ index d1d471a..c5fa3b3 100644
 +EXPORT_SYMBOL(mediatree_dvb_ringbuffer_write);
 +EXPORT_SYMBOL(mediatree_dvb_ringbuffer_write_user);
 diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
-index ea038aa..f65eeab 100644
+index ea038aa..de19d9f 100644
 --- a/drivers/media/dvb-core/dvbdev.c
 +++ b/drivers/media/dvb-core/dvbdev.c
 @@ -122,7 +122,7 @@ static const struct file_operations dvb_device_fops =
@@ -1699,6 +1714,24 @@ index ea038aa..f65eeab 100644
  
  /* if the miracle happens and "generic_usercopy()" is included into
     the kernel, then this can vanish. please don't make the mistake and
+@@ -1033,7 +1033,7 @@ static int __init init_dvbdev(void)
+ 	int retval;
+ 	dev_t dev = MKDEV(DVB_MAJOR, 0);
+ 
+-	if ((retval = register_chrdev_region(dev, MAX_DVB_MINORS, "DVB")) != 0) {
++	if ((retval = register_chrdev_region(dev, MAX_DVB_MINORS, "MEDIATREE-DVB")) != 0) {
+ 		pr_err("dvb-core: unable to get major %d\n", DVB_MAJOR);
+ 		return retval;
+ 	}
+@@ -1044,7 +1044,7 @@ static int __init init_dvbdev(void)
+ 		goto error;
+ 	}
+ 
+-	dvb_class = class_create(THIS_MODULE, "dvb");
++	dvb_class = class_create(THIS_MODULE, "mediatree-dvb");
+ 	if (IS_ERR(dvb_class)) {
+ 		retval = PTR_ERR(dvb_class);
+ 		goto error;
 diff --git a/drivers/media/dvb-frontends/af9013.c b/drivers/media/dvb-frontends/af9013.c
 index 7d7c341..db776b4 100644
 --- a/drivers/media/dvb-frontends/af9013.c
@@ -2669,7 +2702,7 @@ index 4d161cc..65510b0 100644
  	kfree(card);
  }
 diff --git a/drivers/media/pci/cx18/cx18-dvb.c b/drivers/media/pci/cx18/cx18-dvb.c
-index 33e5a5b..20cb45c 100644
+index 33e5a5b..b265e04 100644
 --- a/drivers/media/pci/cx18/cx18-dvb.c
 +++ b/drivers/media/pci/cx18/cx18-dvb.c
 @@ -343,7 +343,7 @@ int cx18_dvb_register(struct cx18_stream *stream)
@@ -2681,35 +2714,24 @@ index 33e5a5b..20cb45c 100644
  			CX18_DRIVER_NAME,
  			THIS_MODULE, &cx->pci_dev->dev, adapter_nr);
  	if (ret < 0)
-@@ -361,9 +361,9 @@ int cx18_dvb_register(struct cx18_stream *stream)
+@@ -361,7 +361,7 @@ int cx18_dvb_register(struct cx18_stream *stream)
  	dvbdemux->stop_feed = cx18_dvb_stop_feed;
  	dvbdemux->dmx.capabilities = (DMX_TS_FILTERING |
  		DMX_SECTION_FILTERING | DMX_MEMORY_BASED_FILTERING);
 -	ret = dvb_dmx_init(dvbdemux);
 +	ret = mediatree_dvb_dmx_init(dvbdemux);
  	if (ret < 0)
--		goto err_dvb_unregister_adapter;
-+		goto err_mediatree_dvb_unregister_adapter;
+ 		goto err_dvb_unregister_adapter;
  
- 	dmx = &dvbdemux->dmx;
- 
-@@ -372,13 +372,13 @@ int cx18_dvb_register(struct cx18_stream *stream)
+@@ -372,7 +372,7 @@ int cx18_dvb_register(struct cx18_stream *stream)
  	dvb->dmxdev.filternum = 256;
  	dvb->dmxdev.demux = dmx;
  
 -	ret = dvb_dmxdev_init(&dvb->dmxdev, dvb_adapter);
 +	ret = mediatree_dvb_dmxdev_init(&dvb->dmxdev, dvb_adapter);
  	if (ret < 0)
--		goto err_dvb_dmx_release;
-+		goto err_mediatree_dvb_dmx_release;
+ 		goto err_dvb_dmx_release;
  
- 	ret = dmx->add_frontend(dmx, &dvb->hw_frontend);
- 	if (ret < 0)
--		goto err_dvb_dmxdev_release;
-+		goto err_mediatree_dvb_dmxdev_release;
- 
- 	ret = dmx->add_frontend(dmx, &dvb->mem_frontend);
- 	if (ret < 0)
 @@ -392,7 +392,7 @@ int cx18_dvb_register(struct cx18_stream *stream)
  	if (ret < 0)
  		goto err_disconnect_frontend;
@@ -2719,21 +2741,17 @@ index 33e5a5b..20cb45c 100644
  
  	CX18_INFO("DVB Frontend registered\n");
  	CX18_INFO("Registered DVB adapter%d for %s (%d x %d.%02d kB)\n",
-@@ -410,12 +410,12 @@ err_remove_mem_frontend:
- 	dmx->remove_frontend(dmx, &dvb->mem_frontend);
+@@ -411,11 +411,11 @@ err_remove_mem_frontend:
  err_remove_hw_frontend:
  	dmx->remove_frontend(dmx, &dvb->hw_frontend);
--err_dvb_dmxdev_release:
+ err_dvb_dmxdev_release:
 -	dvb_dmxdev_release(&dvb->dmxdev);
--err_dvb_dmx_release:
--	dvb_dmx_release(dvbdemux);
--err_dvb_unregister_adapter:
--	dvb_unregister_adapter(dvb_adapter);
-+err_mediatree_dvb_dmxdev_release:
 +	mediatree_dvb_dmxdev_release(&dvb->dmxdev);
-+err_mediatree_dvb_dmx_release:
+ err_dvb_dmx_release:
+-	dvb_dmx_release(dvbdemux);
 +	mediatree_dvb_dmx_release(dvbdemux);
-+err_mediatree_dvb_unregister_adapter:
+ err_dvb_unregister_adapter:
+-	dvb_unregister_adapter(dvb_adapter);
 +	mediatree_dvb_unregister_adapter(dvb_adapter);
  err_out:
  	return ret;
@@ -3152,7 +3170,7 @@ index 92fe051..c65e6bd 100644
  					 dma2->size / 188);
  		dma->cbuf = (dma->cbuf + 1) % dma2->num;
 diff --git a/drivers/media/pci/dm1105/dm1105.c b/drivers/media/pci/dm1105/dm1105.c
-index 4ac645a..55d45ae 100644
+index 4ac645a..9509697 100644
 --- a/drivers/media/pci/dm1105/dm1105.c
 +++ b/drivers/media/pci/dm1105/dm1105.c
 @@ -695,7 +695,7 @@ static void dm1105_dmx_buffer(struct work_struct *work)
@@ -3182,35 +3200,23 @@ index 4ac645a..55d45ae 100644
  					THIS_MODULE, &pdev->dev, adapter_nr);
  	if (ret < 0)
  		goto err_i2c_del_adapters;
-@@ -1082,24 +1082,24 @@ static int dm1105_probe(struct pci_dev *pdev,
+@@ -1082,7 +1082,7 @@ static int dm1105_probe(struct pci_dev *pdev,
  	dvbdemux->stop_feed = dm1105_stop_feed;
  	dvbdemux->dmx.capabilities = (DMX_TS_FILTERING |
  			DMX_SECTION_FILTERING | DMX_MEMORY_BASED_FILTERING);
 -	ret = dvb_dmx_init(dvbdemux);
 +	ret = mediatree_dvb_dmx_init(dvbdemux);
  	if (ret < 0)
--		goto err_dvb_unregister_adapter;
-+		goto err_mediatree_dvb_unregister_adapter;
+ 		goto err_dvb_unregister_adapter;
  
- 	dmx = &dvbdemux->dmx;
- 	dev->dmxdev.filternum = 256;
+@@ -1091,7 +1091,7 @@ static int dm1105_probe(struct pci_dev *pdev,
  	dev->dmxdev.demux = dmx;
  	dev->dmxdev.capabilities = 0;
  
 -	ret = dvb_dmxdev_init(&dev->dmxdev, dvb_adapter);
 +	ret = mediatree_dvb_dmxdev_init(&dev->dmxdev, dvb_adapter);
  	if (ret < 0)
--		goto err_dvb_dmx_release;
-+		goto err_mediatree_dvb_dmx_release;
- 
- 	dev->hw_frontend.source = DMX_FRONTEND_0;
- 
- 	ret = dmx->add_frontend(dmx, &dev->hw_frontend);
- 	if (ret < 0)
--		goto err_dvb_dmxdev_release;
-+		goto err_mediatree_dvb_dmxdev_release;
- 
- 	dev->mem_frontend.source = DMX_MEMORY_FE;
+ 		goto err_dvb_dmx_release;
  
 @@ -1111,7 +1111,7 @@ static int dm1105_probe(struct pci_dev *pdev,
  	if (ret < 0)
@@ -3221,7 +3227,7 @@ index 4ac645a..55d45ae 100644
  	if (ret < 0)
  		goto err_disconnect_frontend;
  
-@@ -1139,19 +1139,19 @@ static int dm1105_probe(struct pci_dev *pdev,
+@@ -1139,7 +1139,7 @@ static int dm1105_probe(struct pci_dev *pdev,
  err_workqueue:
  	destroy_workqueue(dev->wq);
  err_dvb_net:
@@ -3230,20 +3236,17 @@ index 4ac645a..55d45ae 100644
  err_disconnect_frontend:
  	dmx->disconnect_frontend(dmx);
  err_remove_mem_frontend:
- 	dmx->remove_frontend(dmx, &dev->mem_frontend);
+@@ -1147,11 +1147,11 @@ err_remove_mem_frontend:
  err_remove_hw_frontend:
  	dmx->remove_frontend(dmx, &dev->hw_frontend);
--err_dvb_dmxdev_release:
+ err_dvb_dmxdev_release:
 -	dvb_dmxdev_release(&dev->dmxdev);
--err_dvb_dmx_release:
--	dvb_dmx_release(dvbdemux);
--err_dvb_unregister_adapter:
--	dvb_unregister_adapter(dvb_adapter);
-+err_mediatree_dvb_dmxdev_release:
 +	mediatree_dvb_dmxdev_release(&dev->dmxdev);
-+err_mediatree_dvb_dmx_release:
+ err_dvb_dmx_release:
+-	dvb_dmx_release(dvbdemux);
 +	mediatree_dvb_dmx_release(dvbdemux);
-+err_mediatree_dvb_unregister_adapter:
+ err_dvb_unregister_adapter:
+-	dvb_unregister_adapter(dvb_adapter);
 +	mediatree_dvb_unregister_adapter(dvb_adapter);
  err_i2c_del_adapters:
  	i2c_del_adapter(&dev->i2c_bb_adap);
@@ -3852,7 +3855,7 @@ index fda24ba..4fff97e 100644
  		return ret;
  
 diff --git a/drivers/media/pci/pluto2/pluto2.c b/drivers/media/pci/pluto2/pluto2.c
-index 6ac9b9b..d219883 100644
+index 6ac9b9b..b55f1d1 100644
 --- a/drivers/media/pci/pluto2/pluto2.c
 +++ b/drivers/media/pci/pluto2/pluto2.c
 @@ -300,7 +300,7 @@ static void pluto_dma_end(struct pluto *pluto, unsigned int nbpackets)
@@ -3882,35 +3885,24 @@ index 6ac9b9b..d219883 100644
  				   THIS_MODULE, &pdev->dev, adapter_nr);
  	if (ret < 0)
  		goto err_i2c_del_adapter;
-@@ -662,9 +662,9 @@ static int pluto2_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+@@ -662,7 +662,7 @@ static int pluto2_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  	dvbdemux->stop_feed = pluto_stop_feed;
  	dvbdemux->dmx.capabilities = (DMX_TS_FILTERING |
  			DMX_SECTION_FILTERING | DMX_MEMORY_BASED_FILTERING);
 -	ret = dvb_dmx_init(dvbdemux);
 +	ret = mediatree_dvb_dmx_init(dvbdemux);
  	if (ret < 0)
--		goto err_dvb_unregister_adapter;
-+		goto err_mediatree_dvb_unregister_adapter;
+ 		goto err_dvb_unregister_adapter;
  
- 	dmx = &dvbdemux->dmx;
- 
-@@ -673,13 +673,13 @@ static int pluto2_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+@@ -673,7 +673,7 @@ static int pluto2_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  	pluto->dmxdev.filternum = NHWFILTERS;
  	pluto->dmxdev.demux = dmx;
  
 -	ret = dvb_dmxdev_init(&pluto->dmxdev, dvb_adapter);
 +	ret = mediatree_dvb_dmxdev_init(&pluto->dmxdev, dvb_adapter);
  	if (ret < 0)
--		goto err_dvb_dmx_release;
-+		goto err_mediatree_dvb_dmx_release;
+ 		goto err_dvb_dmx_release;
  
- 	ret = dmx->add_frontend(dmx, &pluto->hw_frontend);
- 	if (ret < 0)
--		goto err_dvb_dmxdev_release;
-+		goto err_mediatree_dvb_dmxdev_release;
- 
- 	ret = dmx->add_frontend(dmx, &pluto->mem_frontend);
- 	if (ret < 0)
 @@ -693,7 +693,7 @@ static int pluto2_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
  	if (ret < 0)
  		goto err_disconnect_frontend;
@@ -3920,21 +3912,17 @@ index 6ac9b9b..d219883 100644
  out:
  	return ret;
  
-@@ -703,12 +703,12 @@ err_remove_mem_frontend:
- 	dmx->remove_frontend(dmx, &pluto->mem_frontend);
+@@ -704,11 +704,11 @@ err_remove_mem_frontend:
  err_remove_hw_frontend:
  	dmx->remove_frontend(dmx, &pluto->hw_frontend);
--err_dvb_dmxdev_release:
+ err_dvb_dmxdev_release:
 -	dvb_dmxdev_release(&pluto->dmxdev);
--err_dvb_dmx_release:
--	dvb_dmx_release(dvbdemux);
--err_dvb_unregister_adapter:
--	dvb_unregister_adapter(dvb_adapter);
-+err_mediatree_dvb_dmxdev_release:
 +	mediatree_dvb_dmxdev_release(&pluto->dmxdev);
-+err_mediatree_dvb_dmx_release:
+ err_dvb_dmx_release:
+-	dvb_dmx_release(dvbdemux);
 +	mediatree_dvb_dmx_release(dvbdemux);
-+err_mediatree_dvb_unregister_adapter:
+ err_dvb_unregister_adapter:
+-	dvb_unregister_adapter(dvb_adapter);
 +	mediatree_dvb_unregister_adapter(dvb_adapter);
  err_i2c_del_adapter:
  	i2c_del_adapter(&pluto->i2c_adap);
@@ -5636,7 +5624,7 @@ index 288c15a..887868e 100644
  
  #endif
 diff --git a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
-index f1c79f3..c9566f6 100644
+index f1c79f3..68a42cd 100644
 --- a/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
 +++ b/drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
 @@ -9,8 +9,8 @@
@@ -5805,8 +5793,7 @@ index f1c79f3..c9566f6 100644
 -		dev_dbg(&d->udev->dev, "%s: dvb_register_adapter() failed=%d\n",
 +		dev_dbg(&d->udev->dev, "%s: mediatree_dvb_register_adapter() failed=%d\n",
  				__func__, ret);
--		goto err_dvb_register_adapter;
-+		goto err_mediatree_dvb_register_adapter;
+ 		goto err_dvb_register_adapter;
  	}
  
  	adap->dvb_adap.priv = adap;
@@ -5819,25 +5806,55 @@ index f1c79f3..c9566f6 100644
  				__func__, ret);
  		goto err_dvb_register_mc;
  	}
-@@ -457,7 +457,7 @@ static int dvb_usbv2_adapter_dvb_init(struct dvb_usb_adapter *adap)
- 		ret = d->props->read_mac_address(adap,
- 				adap->dvb_adap.proposed_mac);
- 		if (ret < 0)
--			goto err_dvb_dmx_init;
-+			goto err_mediatree_dvb_dmx_init;
+@@ -471,9 +471,9 @@ static int dvb_usbv2_adapter_dvb_init(struct dvb_usb_adapter *adap)
+ 	adap->demux.start_feed       = dvb_usb_start_feed;
+ 	adap->demux.stop_feed        = dvb_usb_stop_feed;
+ 	adap->demux.write_to_decoder = NULL;
+-	ret = dvb_dmx_init(&adap->demux);
++	ret = mediatree_dvb_dmx_init(&adap->demux);
+ 	if (ret < 0) {
+-		dev_err(&d->udev->dev, "%s: dvb_dmx_init() failed=%d\n",
++		dev_err(&d->udev->dev, "%s: mediatree_dvb_dmx_init() failed=%d\n",
+ 				KBUILD_MODNAME, ret);
+ 		goto err_dvb_dmx_init;
+ 	}
+@@ -481,51 +481,51 @@ static int dvb_usbv2_adapter_dvb_init(struct dvb_usb_adapter *adap)
+ 	adap->dmxdev.filternum       = adap->demux.filternum;
+ 	adap->dmxdev.demux           = &adap->demux.dmx;
+ 	adap->dmxdev.capabilities    = 0;
+-	ret = dvb_dmxdev_init(&adap->dmxdev, &adap->dvb_adap);
++	ret = mediatree_dvb_dmxdev_init(&adap->dmxdev, &adap->dvb_adap);
+ 	if (ret < 0) {
+-		dev_err(&d->udev->dev, "%s: dvb_dmxdev_init() failed=%d\n",
++		dev_err(&d->udev->dev, "%s: mediatree_dvb_dmxdev_init() failed=%d\n",
+ 				KBUILD_MODNAME, ret);
+ 		goto err_dvb_dmxdev_init;
+ 	}
  
- 		dev_info(&d->udev->dev, "%s: MAC address: %pM\n",
- 				KBUILD_MODNAME, adap->dvb_adap.proposed_mac);
-@@ -501,7 +501,7 @@ err_dvb_net_init:
+-	ret = dvb_net_init(&adap->dvb_adap, &adap->dvb_net, &adap->demux.dmx);
++	ret = mediatree_dvb_net_init(&adap->dvb_adap, &adap->dvb_net, &adap->demux.dmx);
+ 	if (ret < 0) {
+-		dev_err(&d->udev->dev, "%s: dvb_net_init() failed=%d\n",
++		dev_err(&d->udev->dev, "%s: mediatree_dvb_net_init() failed=%d\n",
+ 				KBUILD_MODNAME, ret);
+ 		goto err_dvb_net_init;
+ 	}
+ 
+ 	return 0;
+ err_dvb_net_init:
+-	dvb_dmxdev_release(&adap->dmxdev);
++	mediatree_dvb_dmxdev_release(&adap->dmxdev);
  err_dvb_dmxdev_init:
- 	dvb_dmx_release(&adap->demux);
+-	dvb_dmx_release(&adap->demux);
++	mediatree_dvb_dmx_release(&adap->demux);
  err_dvb_dmx_init:
 -	dvb_usbv2_media_device_unregister(adap);
 +	mediatree_dvb_usbv2_media_device_unregister(adap);
  err_dvb_register_mc:
- 	dvb_unregister_adapter(&adap->dvb_adap);
+-	dvb_unregister_adapter(&adap->dvb_adap);
++	mediatree_dvb_unregister_adapter(&adap->dvb_adap);
  err_dvb_register_adapter:
-@@ -509,23 +509,23 @@ err_dvb_register_adapter:
+ 	adap->dvb_adap.priv = NULL;
  	return ret;
  }
  
@@ -5894,16 +5911,7 @@ index f1c79f3..c9566f6 100644
  {
  	int ret, i, count_registered = 0;
  	struct dvb_usb_device *d = adap_to_d(adap);
-@@ -644,7 +644,7 @@ static int dvb_usbv2_adapter_frontend_init(struct dvb_usb_adapter *adap)
- 			dev_dbg(&d->udev->dev,
- 					"%s: frontend_attach() failed=%d\n",
- 					__func__, ret);
--			goto err_dvb_frontend_detach;
-+			goto err_mediatree_dvb_frontend_detach;
- 		}
- 	} else {
- 		dev_dbg(&d->udev->dev, "%s: frontend_attach() do not exists\n",
-@@ -661,12 +661,12 @@ static int dvb_usbv2_adapter_frontend_init(struct dvb_usb_adapter *adap)
+@@ -661,7 +661,7 @@ static int dvb_usbv2_adapter_frontend_init(struct dvb_usb_adapter *adap)
  		adap->fe_sleep[i] = adap->fe[i]->ops.sleep;
  		adap->fe[i]->ops.sleep = dvb_usb_fe_sleep;
  
@@ -5912,13 +5920,7 @@ index f1c79f3..c9566f6 100644
  		if (ret < 0) {
  			dev_err(&d->udev->dev,
  					"%s: frontend%d registration failed\n",
- 					KBUILD_MODNAME, i);
--			goto err_dvb_unregister_frontend;
-+			goto err_mediatree_dvb_unregister_frontend;
- 		}
- 
- 		count_registered++;
-@@ -685,7 +685,7 @@ static int dvb_usbv2_adapter_frontend_init(struct dvb_usb_adapter *adap)
+@@ -685,18 +685,18 @@ static int dvb_usbv2_adapter_frontend_init(struct dvb_usb_adapter *adap)
  	if (ret < 0)
  		goto err_dvb_unregister_frontend;
  
@@ -5927,6 +5929,19 @@ index f1c79f3..c9566f6 100644
  
  	return ret;
  
+ err_dvb_unregister_frontend:
+ 	for (i = count_registered - 1; i >= 0; i--)
+-		dvb_unregister_frontend(adap->fe[i]);
++		mediatree_dvb_unregister_frontend(adap->fe[i]);
+ 
+ err_dvb_frontend_detach:
+ 	for (i = MAX_NO_OF_FE_PER_ADAP - 1; i >= 0; i--) {
+ 		if (adap->fe[i]) {
+-			dvb_frontend_detach(adap->fe[i]);
++			mediatree_dvb_frontend_detach(adap->fe[i]);
+ 			adap->fe[i] = NULL;
+ 		}
+ 	}
 @@ -706,7 +706,7 @@ err:
  	return ret;
  }
@@ -7261,7 +7276,7 @@ index 38822ce..8fc4e47 100644
  			if (dec->fe->ops.release)
  				dec->fe->ops.release(dec->fe);
 diff --git a/drivers/staging/media/av7110/av7110.c b/drivers/staging/media/av7110/av7110.c
-index d74ee0e..3a1e1ea 100644
+index d74ee0e..f6d437b 100644
 --- a/drivers/staging/media/av7110/av7110.c
 +++ b/drivers/staging/media/av7110/av7110.c
 @@ -378,7 +378,7 @@ static void debiirq(struct tasklet_struct *t)
@@ -7438,22 +7453,11 @@ index d74ee0e..3a1e1ea 100644
  				   THIS_MODULE, &dev->pci->dev, adapter_nr);
  	if (ret < 0)
  		goto err_put_firmware_1;
-@@ -2475,7 +2475,7 @@ static int av7110_attach(struct saa7146_dev* dev,
- 
- 	ret = i2c_add_adapter(&av7110->i2c_adap);
- 	if (ret < 0)
--		goto err_dvb_unregister_adapter_2;
-+		goto err_mediatree_dvb_unregister_adapter_2;
- 
- 	ttpci_eeprom_parse_mac(&av7110->i2c_adap,
- 			       av7110->dvb_adapter.proposed_mac);
-@@ -2735,8 +2735,8 @@ err_saa71466_vfree_4:
- 		saa7146_vfree_destroy_pgtable(pdev, av7110->grabbing, &av7110->pt);
+@@ -2736,7 +2736,7 @@ err_saa71466_vfree_4:
  err_i2c_del_3:
  	i2c_del_adapter(&av7110->i2c_adap);
--err_dvb_unregister_adapter_2:
+ err_dvb_unregister_adapter_2:
 -	dvb_unregister_adapter(&av7110->dvb_adapter);
-+err_mediatree_dvb_unregister_adapter_2:
 +	mediatree_dvb_unregister_adapter(&av7110->dvb_adapter);
  err_put_firmware_1:
  	put_firmware(av7110);
@@ -8457,9 +8461,18 @@ index 8ed6bcc..7f9e0d6 100644
   *
   * @rbuf: Ringbuffer concerned.
 diff --git a/include/media/dvbdev.h b/include/media/dvbdev.h
-index 2f6b086..f026ead 100644
+index 2f6b086..53245ad 100644
 --- a/include/media/dvbdev.h
 +++ b/include/media/dvbdev.h
+@@ -25,7 +25,7 @@
+ #include <linux/list.h>
+ #include <media/media-device.h>
+ 
+-#define DVB_MAJOR 212
++#define DVB_MAJOR 213
+ 
+ #if defined(CONFIG_DVB_MAX_ADAPTERS) && CONFIG_DVB_MAX_ADAPTERS > 0
+   #define DVB_MAX_ADAPTERS CONFIG_DVB_MAX_ADAPTERS
 @@ -188,29 +188,29 @@ struct dvb_device {
  };
  
