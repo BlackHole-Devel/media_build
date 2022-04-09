@@ -198,6 +198,7 @@ add v3.16_drop_pointing_stick.patch
 add v3.16_dma_buf_export.patch
 add v3.16_media_frame_vector.patch
 add v3.16_devm_gpiod_get_index.patch
+add v3.16_regmap_update_bits.patch
 
 [3.14.255]
 add v3.14_remove_snd_card_new.patch

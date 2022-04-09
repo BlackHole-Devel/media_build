@@ -1,0 +1,241 @@
+diff --git a/drivers/media/tuners/tda18250.c b/drivers/media/tuners/tda18250.c
+index 8a5781b..2cc7e00 100644
+--- a/drivers/media/tuners/tda18250.c
++++ b/drivers/media/tuners/tda18250.c
+@@ -22,33 +22,33 @@ static int tda18250_power_control(struct dvb_frontend *fe,
+ 
+ 	switch (power_state) {
+ 	case TDA18250_POWER_NORMAL:
+-		ret = regmap_write_bits(dev->regmap, R06_POWER2, 0x07, 0x00);
++		ret = regmap_update_bits(dev->regmap, R06_POWER2, 0x07, 0x00);
+ 		if (ret)
+ 			goto err;
+-		ret = regmap_write_bits(dev->regmap, R25_REF, 0xc0, 0xc0);
++		ret = regmap_update_bits(dev->regmap, R25_REF, 0xc0, 0xc0);
+ 		if (ret)
+ 			goto err;
+ 		break;
+ 	case TDA18250_POWER_STANDBY:
+ 		if (dev->loopthrough) {
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R25_REF, 0xc0, 0x80);
+ 			if (ret)
+ 				goto err;
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R06_POWER2, 0x07, 0x02);
+ 			if (ret)
+ 				goto err;
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R10_LT1, 0x80, 0x00);
+ 			if (ret)
+ 				goto err;
+ 		} else {
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R25_REF, 0xc0, 0x80);
+ 			if (ret)
+ 				goto err;
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R06_POWER2, 0x07, 0x01);
+ 			if (ret)
+ 				goto err;
+@@ -56,15 +56,15 @@ static int tda18250_power_control(struct dvb_frontend *fe,
+ 					R0D_AGC12, &utmp);
+ 			if (ret)
+ 				goto err;
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R0D_AGC12, 0x03, 0x03);
+ 			if (ret)
+ 				goto err;
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R10_LT1, 0x80, 0x80);
+ 			if (ret)
+ 				goto err;
+-			ret = regmap_write_bits(dev->regmap,
++			ret = regmap_update_bits(dev->regmap,
+ 					R0D_AGC12, 0x03, utmp & 0x03);
+ 			if (ret)
+ 				goto err;
+@@ -196,7 +196,7 @@ static int tda18250_init(struct dvb_frontend *fe)
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R10_LT1, 0x80,
++	ret = regmap_update_bits(dev->regmap, R10_LT1, 0x80,
+ 			dev->loopthrough ? 0x00 : 0x80);
+ 	if (ret)
+ 		goto err;
+@@ -236,7 +236,7 @@ static int tda18250_init(struct dvb_frontend *fe)
+ 
+ warm:
+ 	/* power up LNA */
+-	ret = regmap_write_bits(dev->regmap, R0C_AGC11, 0x80, 0x00);
++	ret = regmap_update_bits(dev->regmap, R0C_AGC11, 0x80, 0x00);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -256,7 +256,7 @@ static int tda18250_set_agc(struct dvb_frontend *fe)
+ 
+ 	dev_dbg(&client->dev, "\n");
+ 
+-	ret = regmap_write_bits(dev->regmap, R1F_RF_BPF, 0x87, 0x06);
++	ret = regmap_update_bits(dev->regmap, R1F_RF_BPF, 0x87, 0x06);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -287,7 +287,7 @@ static int tda18250_set_agc(struct dvb_frontend *fe)
+ 		break;
+ 	}
+ 
+-	ret = regmap_write_bits(dev->regmap, R0C_AGC11, 0x07, utmp);
++	ret = regmap_update_bits(dev->regmap, R0C_AGC11, 0x07, utmp);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -320,13 +320,13 @@ static int tda18250_set_agc(struct dvb_frontend *fe)
+ 		}
+ 		break;
+ 	}
+-	ret = regmap_write_bits(dev->regmap, R58_AGC2_UP1, 0x1f, utmp2+8);
++	ret = regmap_update_bits(dev->regmap, R58_AGC2_UP1, 0x1f, utmp2+8);
+ 	if (ret)
+ 		goto err;
+-	ret = regmap_write_bits(dev->regmap, R13_AGC22, 0x1f, utmp);
++	ret = regmap_update_bits(dev->regmap, R13_AGC22, 0x1f, utmp);
+ 	if (ret)
+ 		goto err;
+-	ret = regmap_write_bits(dev->regmap, R14_AGC23, 0x1f, utmp2);
++	ret = regmap_update_bits(dev->regmap, R14_AGC23, 0x1f, utmp2);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -340,11 +340,11 @@ static int tda18250_set_agc(struct dvb_frontend *fe)
+ 		utmp = 90;
+ 		break;
+ 	}
+-	ret = regmap_write_bits(dev->regmap, R16_AGC25, 0xf8, utmp);
++	ret = regmap_update_bits(dev->regmap, R16_AGC25, 0xf8, utmp);
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R12_AGC21, 0x60,
++	ret = regmap_update_bits(dev->regmap, R12_AGC21, 0x60,
+ 			(c->frequency > 800000000) ? 0x40 : 0x20);
+ 	if (ret)
+ 		goto err;
+@@ -385,7 +385,7 @@ static int tda18250_set_agc(struct dvb_frontend *fe)
+ 				(c->frequency < 600000000)) ? 0x02 : 0x04;
+ 		break;
+ 	}
+-	ret = regmap_write_bits(dev->regmap, R20_IR_MIX, 0x06, utmp);
++	ret = regmap_update_bits(dev->regmap, R20_IR_MIX, 0x06, utmp);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -399,7 +399,7 @@ static int tda18250_set_agc(struct dvb_frontend *fe)
+ 		utmp = (c->frequency < 600000000) ? 0 : 3;
+ 		break;
+ 	}
+-	ret = regmap_write_bits(dev->regmap, R16_AGC25, 0x03, utmp);
++	ret = regmap_update_bits(dev->regmap, R16_AGC25, 0x03, utmp);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -415,7 +415,7 @@ static int tda18250_set_agc(struct dvb_frontend *fe)
+ 		utmp = 0x0c;
+ 		break;
+ 	}
+-	ret = regmap_write_bits(dev->regmap, R0F_AGC14, 0x3f, utmp);
++	ret = regmap_update_bits(dev->regmap, R0F_AGC14, 0x3f, utmp);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -583,7 +583,7 @@ static int tda18250_set_params(struct dvb_frontend *fe)
+ 
+ 	/* set delivery system dependent registers */
+ 	for (i = 0; i < 16; i++) {
+-		ret = regmap_write_bits(dev->regmap, delsys_params[REG][i],
++		ret = regmap_update_bits(dev->regmap, delsys_params[REG][i],
+ 			 delsys_params[MASK][i],  delsys_params[j][i]);
+ 		if (ret)
+ 			goto err;
+@@ -604,11 +604,11 @@ static int tda18250_set_params(struct dvb_frontend *fe)
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R1A_AGCK, 0x03, 0x01);
++	ret = regmap_update_bits(dev->regmap, R1A_AGCK, 0x03, 0x01);
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R14_AGC23, 0x40, 0x00);
++	ret = regmap_update_bits(dev->regmap, R14_AGC23, 0x40, 0x00);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -642,7 +642,7 @@ static int tda18250_set_params(struct dvb_frontend *fe)
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R4F_XTALFLX3, 0xe0,
++	ret = regmap_update_bits(dev->regmap, R4F_XTALFLX3, 0xe0,
+ 			(buf[0] << 6) | (buf[1] << 5));
+ 	if (ret)
+ 		goto err;
+@@ -652,11 +652,11 @@ static int tda18250_set_params(struct dvb_frontend *fe)
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R46_CPUMP, 0x07, 0x00);
++	ret = regmap_update_bits(dev->regmap, R46_CPUMP, 0x07, 0x00);
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R39_SD5, 0x03, 0x00);
++	ret = regmap_update_bits(dev->regmap, R39_SD5, 0x03, 0x00);
+ 	if (ret)
+ 		goto err;
+ 
+@@ -676,23 +676,23 @@ static int tda18250_set_params(struct dvb_frontend *fe)
+ 	/* pll locking */
+ 	msleep(20);
+ 
+-	ret = regmap_write_bits(dev->regmap, R2B_MSM2, 0x04, 0x04);
++	ret = regmap_update_bits(dev->regmap, R2B_MSM2, 0x04, 0x04);
+ 	if (ret)
+ 		goto err;
+ 
+ 	msleep(20);
+ 
+ 	/* restore AGCK */
+-	ret = regmap_write_bits(dev->regmap, R1A_AGCK, 0x03, 0x03);
++	ret = regmap_update_bits(dev->regmap, R1A_AGCK, 0x03, 0x03);
+ 	if (ret)
+ 		goto err;
+ 
+-	ret = regmap_write_bits(dev->regmap, R14_AGC23, 0x40, 0x40);
++	ret = regmap_update_bits(dev->regmap, R14_AGC23, 0x40, 0x40);
+ 	if (ret)
+ 		goto err;
+ 
+ 	/* charge pump */
+-	ret = regmap_write_bits(dev->regmap, R46_CPUMP, 0x07, buf[2]);
++	ret = regmap_update_bits(dev->regmap, R46_CPUMP, 0x07, buf[2]);
+ 
+ 	return 0;
+ err:
+@@ -717,7 +717,7 @@ static int tda18250_sleep(struct dvb_frontend *fe)
+ 	dev_dbg(&client->dev, "\n");
+ 
+ 	/* power down LNA */
+-	ret = regmap_write_bits(dev->regmap, R0C_AGC11, 0x80, 0x00);
++	ret = regmap_update_bits(dev->regmap, R0C_AGC11, 0x80, 0x00);
+ 	if (ret)
+ 		return ret;
+ 
