@@ -29,6 +29,7 @@ add ccs.patch
 add rc-cec.patch
 add media_tree.patch
 add vu_adapter_adjustment.patch
+add media_tree_integration_in_running_kernel.patch
 
 [5.15.1023]
 add v5.15_container_of.patch

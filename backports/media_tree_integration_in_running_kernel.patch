@@ -1,0 +1,69 @@
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index 50b566a..79b5526 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -444,10 +444,16 @@ static int dvb_register_media_device(struct dvb_device *dvbdev,
+ 	return 0;
+ }
+ 
++int dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
++			const struct dvb_device *template, void *priv,
++			enum dvb_device_type type);
++
+ int mediatree_dvb_register_device(struct dvb_adapter *adap, struct dvb_device **pdvbdev,
+ 			const struct dvb_device *template, void *priv,
+ 			enum dvb_device_type type, int demux_sink_pads)
+ {
++	return dvb_register_device(adap, pdvbdev, template, priv, type);
++/*
+ 	struct dvb_device *dvbdev;
+ 	struct file_operations *dvbdevfops;
+ 	struct device *clsdev;
+@@ -542,7 +548,7 @@ int mediatree_dvb_register_device(struct dvb_adapter *adap, struct dvb_device **
+ 	dprintk("DVB: register adapter%d/%s%d @ minor: %i (0x%02x)\n",
+ 		adap->num, dnames[type], id, minor, minor);
+ 
+-	return 0;
++	return 0;*/
+ }
+ EXPORT_SYMBOL(mediatree_dvb_register_device);
+ 
+@@ -575,11 +581,13 @@ void mediatree_dvb_free_device(struct dvb_device *dvbdev)
+ }
+ EXPORT_SYMBOL(mediatree_dvb_free_device);
+ 
++void dvb_unregister_device(struct dvb_device *dvbdev);
+ 
+ void mediatree_dvb_unregister_device(struct dvb_device *dvbdev)
+ {
+-	mediatree_dvb_remove_device(dvbdev);
+-	mediatree_dvb_free_device(dvbdev);
++	dvb_unregister_device(dvbdev);
++/*	mediatree_dvb_remove_device(dvbdev);
++	mediatree_dvb_free_device(dvbdev);*/
+ }
+ EXPORT_SYMBOL(mediatree_dvb_unregister_device);
+ 
+diff --git a/include/media/dvbdev.h b/include/media/dvbdev.h
+index 53245ad..a126590 100644
+--- a/include/media/dvbdev.h
++++ b/include/media/dvbdev.h
+@@ -55,6 +55,9 @@
+  *				Deprecated. Used only on av7110.
+  */
+ enum dvb_device_type {
++	DVB_DEVICE_VIDEO,
++	DVB_DEVICE_AUDIO,
++
+ 	DVB_DEVICE_SEC,
+ 	DVB_DEVICE_FRONTEND,
+ 	DVB_DEVICE_DEMUX,
+@@ -62,8 +65,6 @@ enum dvb_device_type {
+ 	DVB_DEVICE_CA,
+ 	DVB_DEVICE_NET,
+ 
+-	DVB_DEVICE_VIDEO,
+-	DVB_DEVICE_AUDIO,
+ 	DVB_DEVICE_OSD,
+ };
+ 
