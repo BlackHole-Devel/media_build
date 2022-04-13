@@ -31,6 +31,7 @@ add media_tree.patch
 add media_tree_rtl28xx.patch
 add media_tree_af9015.patch
 add media_tree_af9035.patch
+add media_tree_gl861.patch
 add media_tree_mxl111sf.patch
 add vu_adapter_adjustment.patch
 add media_tree_integration_in_running_kernel.patch
