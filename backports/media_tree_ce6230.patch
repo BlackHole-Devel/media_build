@@ -1,0 +1,21 @@
+diff --git a/drivers/media/usb/dvb-usb-v2/ce6230.c b/drivers/media/usb/dvb-usb-v2/ce6230.c
+index 44540de..b9d0cc0 100644
+--- a/drivers/media/usb/dvb-usb-v2/ce6230.c
++++ b/drivers/media/usb/dvb-usb-v2/ce6230.c
+@@ -262,11 +262,11 @@ MODULE_DEVICE_TABLE(usb, ce6230_id_table);
+ static struct usb_driver ce6230_usb_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = ce6230_id_table,
+-	.probe = dvb_usbv2_probe,
+-	.disconnect = dvb_usbv2_disconnect,
+-	.suspend = dvb_usbv2_suspend,
+-	.resume = dvb_usbv2_resume,
+-	.reset_resume = dvb_usbv2_reset_resume,
++	.probe = mediatree_dvb_usbv2_probe,
++	.disconnect = mediatree_dvb_usbv2_disconnect,
++	.suspend = mediatree_dvb_usbv2_suspend,
++	.resume = mediatree_dvb_usbv2_resume,
++	.reset_resume = mediatree_dvb_usbv2_reset_resume,
+ 	.no_dynamic_id = 1,
+ 	.soft_unbind = 1,
+ };
