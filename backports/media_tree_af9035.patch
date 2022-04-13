@@ -1,0 +1,37 @@
+diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
+index 5eef37b..a1bb6ee 100644
+--- a/drivers/media/usb/dvb-usb-v2/af9035.c
++++ b/drivers/media/usb/dvb-usb-v2/af9035.c
+@@ -69,7 +69,7 @@ static int af9035_ctrl_msg(struct dvb_usb_device *d, struct usb_req *req)
+ 	if (req->cmd == CMD_FW_DL)
+ 		rlen = 0;
+ 
+-	ret = dvb_usbv2_generic_rw_locked(d,
++	ret = mediatree_dvb_usbv2_generic_rw_locked(d,
+ 			state->buf, wlen, state->buf, rlen);
+ 	if (ret)
+ 		goto exit;
+@@ -1990,7 +1990,7 @@ static int af9035_probe(struct usb_interface *intf,
+ 		}
+ 	}
+ 
+-	return dvb_usbv2_probe(intf, id);
++	return mediatree_dvb_usbv2_probe(intf, id);
+ }
+ 
+ /* interface 0 is used by DVB-T receiver and
+@@ -2164,10 +2164,10 @@ static struct usb_driver af9035_usb_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = af9035_id_table,
+ 	.probe = af9035_probe,
+-	.disconnect = dvb_usbv2_disconnect,
+-	.suspend = dvb_usbv2_suspend,
+-	.resume = dvb_usbv2_resume,
+-	.reset_resume = dvb_usbv2_reset_resume,
++	.disconnect = mediatree_dvb_usbv2_disconnect,
++	.suspend = mediatree_dvb_usbv2_suspend,
++	.resume = mediatree_dvb_usbv2_resume,
++	.reset_resume = mediatree_dvb_usbv2_reset_resume,
+ 	.no_dynamic_id = 1,
+ 	.soft_unbind = 1,
+ };
