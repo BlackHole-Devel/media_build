@@ -1,0 +1,19 @@
+diff --git a/drivers/media/usb/dvb-usb-v2/ec168.c b/drivers/media/usb/dvb-usb-v2/ec168.c
+index 7ed0ab9..4fcdd66 100644
+--- a/drivers/media/usb/dvb-usb-v2/ec168.c
++++ b/drivers/media/usb/dvb-usb-v2/ec168.c
+@@ -350,10 +350,10 @@ MODULE_DEVICE_TABLE(usb, ec168_id);
+ static struct usb_driver ec168_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = ec168_id,
+-	.probe = dvb_usbv2_probe,
+-	.disconnect = dvb_usbv2_disconnect,
+-	.suspend = dvb_usbv2_suspend,
+-	.resume = dvb_usbv2_resume,
++	.probe = mediatree_dvb_usbv2_probe,
++	.disconnect = mediatree_dvb_usbv2_disconnect,
++	.suspend = mediatree_dvb_usbv2_suspend,
++	.resume = mediatree_dvb_usbv2_resume,
+ 	.no_dynamic_id = 1,
+ 	.soft_unbind = 1,
+ };
