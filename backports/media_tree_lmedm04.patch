@@ -1,0 +1,24 @@
+diff --git a/drivers/media/usb/dvb-usb-v2/lmedm04.c b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+index 998475c..875d48e 100644
+--- a/drivers/media/usb/dvb-usb-v2/lmedm04.c
++++ b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+@@ -152,7 +152,7 @@ static int lme2510_usb_talk(struct dvb_usb_device *d,
+ 
+ 	memcpy(st->usb_buffer, wbuf, wlen);
+ 
+-	ret = dvb_usbv2_generic_rw_locked(d, st->usb_buffer, wlen,
++	ret = mediatree_dvb_usbv2_generic_rw_locked(d, st->usb_buffer, wlen,
+ 					  st->usb_buffer, rlen);
+ 
+ 	if (rlen)
+@@ -1242,8 +1242,8 @@ MODULE_DEVICE_TABLE(usb, lme2510_id_table);
+ 
+ static struct usb_driver lme2510_driver = {
+ 	.name		= KBUILD_MODNAME,
+-	.probe		= dvb_usbv2_probe,
+-	.disconnect	= dvb_usbv2_disconnect,
++	.probe		= mediatree_dvb_usbv2_probe,
++	.disconnect	= mediatree_dvb_usbv2_disconnect,
+ 	.id_table	= lme2510_id_table,
+ 	.no_dynamic_id = 1,
+ 	.soft_unbind = 1,
