@@ -1,0 +1,21 @@
+diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+index 2ed29ce..feaf821 100644
+--- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
++++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+@@ -1979,11 +1979,11 @@ MODULE_DEVICE_TABLE(usb, rtl28xxu_id_table);
+ static struct usb_driver rtl28xxu_usb_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = rtl28xxu_id_table,
+-	.probe = dvb_usbv2_probe,
+-	.disconnect = dvb_usbv2_disconnect,
+-	.suspend = dvb_usbv2_suspend,
+-	.resume = dvb_usbv2_resume,
+-	.reset_resume = dvb_usbv2_reset_resume,
++	.probe = mediatree_dvb_usbv2_probe,
++	.disconnect = mediatree_dvb_usbv2_disconnect,
++	.suspend = mediatree_dvb_usbv2_suspend,
++	.resume = mediatree_dvb_usbv2_resume,
++	.reset_resume = mediatree_dvb_usbv2_reset_resume,
+ 	.no_dynamic_id = 1,
+ 	.soft_unbind = 1,
+ };
