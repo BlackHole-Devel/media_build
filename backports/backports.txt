@@ -29,6 +29,7 @@ add ccs.patch
 add rc-cec.patch
 add media_tree.patch
 add media_tree_rtl28xx.patch
+add media_tree_af9015.patch
 add media_tree_af9035.patch
 add vu_adapter_adjustment.patch
 add media_tree_integration_in_running_kernel.patch

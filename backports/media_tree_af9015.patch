@@ -1,0 +1,30 @@
+diff --git a/drivers/media/usb/dvb-usb-v2/af9015.c b/drivers/media/usb/dvb-usb-v2/af9015.c
+index 9443706..40bc847 100644
+--- a/drivers/media/usb/dvb-usb-v2/af9015.c
++++ b/drivers/media/usb/dvb-usb-v2/af9015.c
+@@ -89,7 +89,7 @@ static int af9015_ctrl_msg(struct dvb_usb_device *d, struct req_t *req)
+ 	if (req->cmd == DOWNLOAD_FIRMWARE || req->cmd == RECONNECT_USB)
+ 		rlen = 0;
+ 
+-	ret = dvb_usbv2_generic_rw_locked(d, state->buf, wlen,
++	ret = mediatree_dvb_usbv2_generic_rw_locked(d, state->buf, wlen,
+ 					  state->buf, rlen);
+ 	if (ret)
+ 		goto error;
+@@ -1511,11 +1511,11 @@ MODULE_DEVICE_TABLE(usb, af9015_id_table);
+ static struct usb_driver af9015_usb_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = af9015_id_table,
+-	.probe = dvb_usbv2_probe,
+-	.disconnect = dvb_usbv2_disconnect,
+-	.suspend = dvb_usbv2_suspend,
+-	.resume = dvb_usbv2_resume,
+-	.reset_resume = dvb_usbv2_reset_resume,
++	.probe = mediatree_dvb_usbv2_probe,
++	.disconnect = mediatree_dvb_usbv2_disconnect,
++	.suspend = mediatree_dvb_usbv2_suspend,
++	.resume = mediatree_dvb_usbv2_resume,
++	.reset_resume = mediatree_dvb_usbv2_reset_resume,
+ 	.no_dynamic_id = 1,
+ 	.soft_unbind = 1,
+ };
