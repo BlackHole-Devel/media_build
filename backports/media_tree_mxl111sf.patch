@@ -1,0 +1,30 @@
+diff --git a/drivers/media/usb/dvb-usb-v2/mxl111sf.c b/drivers/media/usb/dvb-usb-v2/mxl111sf.c
+index cd5861a..15bc18a 100644
+--- a/drivers/media/usb/dvb-usb-v2/mxl111sf.c
++++ b/drivers/media/usb/dvb-usb-v2/mxl111sf.c
+@@ -70,8 +70,8 @@ int mxl111sf_ctrl_msg(struct mxl111sf_state *state,
+ 	state->sndbuf[0] = cmd;
+ 	memcpy(&state->sndbuf[1], wbuf, wlen);
+ 
+-	ret = (wo) ? dvb_usbv2_generic_write(d, state->sndbuf, 1+wlen) :
+-		dvb_usbv2_generic_rw(d, state->sndbuf, 1+wlen, state->rcvbuf,
++	ret = (wo) ? mediatree_dvb_usbv2_generic_write(d, state->sndbuf, 1+wlen) :
++		mediatree_dvb_usbv2_generic_rw(d, state->sndbuf, 1+wlen, state->rcvbuf,
+ 				     rlen);
+ 
+ 	if (rbuf)
+@@ -1450,10 +1450,10 @@ MODULE_DEVICE_TABLE(usb, mxl111sf_id_table);
+ static struct usb_driver mxl111sf_usb_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = mxl111sf_id_table,
+-	.probe = dvb_usbv2_probe,
+-	.disconnect = dvb_usbv2_disconnect,
+-	.suspend = dvb_usbv2_suspend,
+-	.resume = dvb_usbv2_resume,
++	.probe = mediatree_dvb_usbv2_probe,
++	.disconnect = mediatree_dvb_usbv2_disconnect,
++	.suspend = mediatree_dvb_usbv2_suspend,
++	.resume = mediatree_dvb_usbv2_resume,
+ 	.no_dynamic_id = 1,
+ 	.soft_unbind = 1,
+ };
