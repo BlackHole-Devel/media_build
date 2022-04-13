@@ -32,6 +32,7 @@ add media_tree_rtl28xx.patch
 add media_tree_af9015.patch
 add media_tree_af9035.patch
 add media_tree_anysee.patch
+add media_tree_au6610.patch
 add media_tree_ec168.patch
 add media_tree_gl861.patch
 add media_tree_mxl111sf.patch
